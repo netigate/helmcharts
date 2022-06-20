@@ -31,6 +31,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      serviceAccountName: {{ .Values.name }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
