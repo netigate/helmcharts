@@ -1,6 +1,6 @@
 apiVersion: v2
-name: netigate-template
-description: A Helm chart template for netigate
+name: helm-test
+description: test helm
 
 # A chart can be either an 'application' or a 'library' chart.
 #
