@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+  {{- if or .Values.grpc.enabled .Values.secret }}
+  annotations:
+    secret.reloader.stakater.com/reload: "{{- if .Values.grpc.enabled }}grpc-wildcard-certificate{{- end }}{{- if and .Values.grpc.enabled .Values.secret }},{{- end }}{{- if .Values.secret }}{{ .Values.name }}{{- end }}"
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      {{- if .Values.logging.enabled }}
+      annotations:
+        netigate/log-format: {{ .Values.logging.format }}
+        {{- if .Values.vault.enabled }}
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/role: "{{ .Values.name }}"
+        vault.hashicorp.com/agent-inject-secret-config: "{{ .Values.vault.team }}/data/{{ .Values.name }}/config"
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image }}:{{ .Values.tag }}"
+          imagePullPolicy: IfNotPresent
+          {{- if or .Values.grpc.enabled .Values.postgres.enabled }}
+          env:
+            {{- if .Values.grpc.enabled }}
+            - name: grpcDomain
+              value: {{ .Values.name }}.{{ .Values.grpc.grpcDomain }}
+            - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
+              value: https://{{ .Values.name }}.{{ .Values.grpc.grpcDomain }}:443
+            {{- end }}
+            {{- if .Values.postgres.enabled }}
+            - name: ConnectionStrings__Postgres_Context
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-{{ .Values.postgres.databaseServer }}-{{ .Values.postgres.databaseName }}
+                  key: postgresConnectionString
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.grpc.enabled }}
+          - name: grpc
+            mountPath: /netigate/cert/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.secret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.name }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.metrics.containerPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.grpc.enabled }}
+            - name: https
+              containerPort: {{ .Values.grpc.containerPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      {{- if .Values.grpc.enabled }}
+      - secret:
+          secretName: grpc-wildcard-certificate
+        name: grpc
+      {{- end }}

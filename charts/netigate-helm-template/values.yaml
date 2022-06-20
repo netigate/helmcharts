@@ -1,0 +1,67 @@
+name:
+namespace:
+image:
+tag:
+
+replicaCount: 3
+
+imagePullSecrets: []
+
+autoscaling:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+metrics:
+  enabled: false
+  containerPort: 
+
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false
+
+ingress:
+  enabled: false
+  host: 
+  contextpath: /
+  tlsSecretName: 
+
+internalIngress:
+  enabled: false
+  host: 
+  contextpath: /
+
+service:
+  containerPort: 80
+
+grpc:
+  enabled: false
+  containerPort: 443
+  grpcDomain: 
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+postgres:
+  enabled: false
+  databaseServer:
+  databaseName:
+
+logging:
+  enabled: true
+  format: plaintext
+
+vault:
+  enabled: false
+  team: none
