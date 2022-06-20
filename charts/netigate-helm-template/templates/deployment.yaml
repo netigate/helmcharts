@@ -62,10 +62,16 @@ spec:
             mountPath: /netigate/cert/
             readOnly: true
           {{- end }}
-          {{- if .Values.secret }}
+          {{- if or .Values.secret .Values.enabled  }}
           envFrom:
+            {{- if .Values.secret }}
             - secretRef:
                 name: {{ .Values.name }}
+            {{- end }}
+            {{- if and .Values.enabled .Values.vault.env  }}
+            - secretRef:
+                name: {{ {{ .Values.name }}-secret }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
