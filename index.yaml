@@ -1,6 +1,27 @@
 apiVersion: v1
 entries:
+  helm-test:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-06-20T10:48:49.908909158Z"
+    description: test helm
+    digest: 1bedc9db58b71d64f9bbb1722c230a043507bb582606e795043a688c46cc3235
+    name: helm-test
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/helm-test-0.1.10/helm-test-0.1.10.tgz
+    version: 0.1.10
   netigate-template:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-06-20T10:48:50.075352291Z"
+    description: A Helm chart template for netigate
+    digest: a35173492a5461cebbc8a7a3b777fa1ac9dedb3b092be34e40fcd3d281c0554b
+    name: netigate-template
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-0.3.0/netigate-template-0.3.0.tgz
+    version: 0.3.0
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-05-20T13:21:46.068611311Z"
