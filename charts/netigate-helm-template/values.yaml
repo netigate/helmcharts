@@ -64,6 +64,5 @@ logging:
 
 vault:
   enabled: false
-  team: none
-  address: 
+  team:
   env:

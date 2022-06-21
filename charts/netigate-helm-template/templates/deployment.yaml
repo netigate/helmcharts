@@ -5,9 +5,9 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-  {{- if or .Values.grpc.enabled .Values.secret }}
+  {{- if or .Values.grpc.enabled .Values.secret .Values.vault.env}}
   annotations:
-    secret.reloader.stakater.com/reload: "{{- if .Values.grpc.enabled }}grpc-wildcard-certificate{{- end }}{{- if and .Values.grpc.enabled .Values.secret }},{{- end }}{{- if .Values.secret }}{{ .Values.name }}{{- end }}"
+    secret.reloader.stakater.com/reload: "{{- if .Values.grpc.enabled }}grpc-wildcard-certificate{{- end }}{{- if and .Values.grpc.enabled .Values.secret }},{{- end }}{{- if .Values.secret }}{{ .Values.name }}{{- end }}{{- if and .Values.grpc.enabled .Values.vault.env }},{{- end }}{{- if .Values.vault.env }}{{ {{ .Values.name }}-secret }}{{- end }}"
   {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -70,7 +70,7 @@ spec:
             {{- end }}
             {{- if and .Values.enabled .Values.vault.env  }}
             - secretRef:
-                name: {{ {{ .Values.name }}-secret }}
+                name: {{ .Values.name }}-secret
             {{- end }}
           {{- end }}
           ports:
