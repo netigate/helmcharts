@@ -40,8 +40,17 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.postgres.enabled }}
+          {{- if or .Values.grpc.enabled .Values.postgres.enabled .Values.vault.env }}
           env:
+            {{- if .Values.vault.env }}
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.grpc.enabled }}
             - name: grpcDomain
               value: {{ .Values.name }}.{{ .Values.grpc.grpcDomain }}
@@ -61,6 +70,11 @@ spec:
           - name: grpc
             mountPath: /netigate/cert/
             readOnly: true
+          {{- end }}
+          {{- if .Values.vault.env }}
+          - name: secrets-mount
+            mountPath: /mnt/secrets-store
+            readOnly: true          
           {{- end }}
           {{- if or .Values.secret .Values.enabled  }}
           envFrom:
@@ -106,4 +120,12 @@ spec:
       - secret:
           secretName: grpc-wildcard-certificate
         name: grpc
+      {{- end }}
+      {{- if .Values.vault.env }}
+      - name: secrets-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-secret"
       {{- end }}

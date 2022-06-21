@@ -65,4 +65,3 @@ logging:
 vault:
   enabled: false
   team:
-  env:
