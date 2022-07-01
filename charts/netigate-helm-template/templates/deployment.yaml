@@ -40,7 +40,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.postgres.enabled .Values.vault.env }}
+          {{- if or .Values.grpc.enabled .Values.postgres.enabled .Values.vault.env .Values.kafka.enable }}
           env:
             {{- if .Values.vault.env }}
             {{- range .Values.vault.env }}
@@ -64,11 +64,33 @@ spec:
                   name: postgres-{{ .Values.postgres.databaseServer }}-{{ .Values.postgres.databaseName }}
                   key: postgresConnectionString
             {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: kafka-service-uri
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: service_uri
+            - name: kafka-username
+                valueFrom:
+                  secretKeyRef:
+                    name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                    key: username
+            - name: kafka-schema-regitry-uri
+                valueFrom:
+                  secretKeyRef:
+                    name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                    key: schema_registry_uri
+            {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.grpc.enabled }}
           - name: grpc
             mountPath: /netigate/cert/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.kafka.enabled }}
+          - name: kafka
+            mountPath: /netigate/kafka/
             readOnly: true
           {{- end }}
           {{- if .Values.vault.env }}
@@ -106,12 +128,14 @@ spec:
             httpGet:
               path: /health
               port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /health
               port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -128,4 +152,9 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-secret"
+      {{- end }}
+      {{- if .Values.kafka.enabled }}
+      - secret:
+          secretName: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+        name: kafka
       {{- end }}

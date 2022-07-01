@@ -50,7 +50,7 @@ grpc:
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 10
   targetCPUUtilizationPercentage: 80
 
 postgres:
@@ -65,3 +65,8 @@ logging:
 vault:
   enabled: false
   team:
+
+kafka:
+  enabled: false
+  cluster:
+  app:
