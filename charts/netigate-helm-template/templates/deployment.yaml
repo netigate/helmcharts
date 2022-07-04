@@ -65,17 +65,17 @@ spec:
                   key: postgresConnectionString
             {{- end }}
             {{- if .Values.kafka.enabled }}
-            - name: kafka-service-uri
+            - name: EventBus__BootStrapServers
               valueFrom:
                 secretKeyRef:
                   name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
                   key: service_uri
-            - name: kafka-username
+            - name: EventBus__SchemaRegistry__Username
                 valueFrom:
                   secretKeyRef:
                     name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
                     key: username
-            - name: kafka-schema-regitry-uri
+            - name: EventBus__SchemaRegistry__Url
                 valueFrom:
                   secretKeyRef:
                     name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
