@@ -58,7 +58,7 @@ spec:
               value: https://{{ .Values.name }}.{{ .Values.grpc.grpcDomain }}:443
             {{- end }}
             {{- if .Values.postgres.enabled }}
-            - name: ConnectionStrings__Postgres_Context
+            - name: ConnectionStrings__PostgresContext
               valueFrom:
                 secretKeyRef:
                   name: postgres-{{ .Values.postgres.databaseServer }}-{{ .Values.postgres.databaseName }}
