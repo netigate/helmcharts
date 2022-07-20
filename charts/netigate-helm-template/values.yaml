@@ -70,3 +70,6 @@ kafka:
   enabled: false
   cluster:
   app:
+
+healthProbe:
+  enabled: false
