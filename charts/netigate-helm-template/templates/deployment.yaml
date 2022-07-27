@@ -71,15 +71,15 @@ spec:
                   name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
                   key: service_uri
             - name: EventBus__SchemaRegistry__Username
-                valueFrom:
-                  secretKeyRef:
-                    name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
-                    key: username
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: username
             - name: EventBus__SchemaRegistry__Url
-                valueFrom:
-                  secretKeyRef:
-                    name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
-                    key: schema_registry_uri
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: schema_registry_uri
             {{- end }}
           {{- end }}
           volumeMounts:
