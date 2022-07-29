@@ -24,6 +24,7 @@ spec:
       annotations:
         netigate/log-format: {{ .Values.logging.format }}
         {{- if .Values.vault.enabled }}
+        vault.hashicorp.com/log-format: json
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-status: "update"
         vault.hashicorp.com/role: "{{ .Values.name }}"
