@@ -222,4 +222,15 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/netigate-template-0.1.5/netigate-template-0.1.5.tgz
     version: 0.1.5
+  nginx-custom-ingress:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-09-09T13:01:48.122403857Z"
+    description: desc
+    digest: 8217381be068eb90bffe5452367e4b0f2842391ff15d83ded42eac1cc4ba4501
+    name: nginx-custom-ingress
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/nginx-custom-ingress-0.0.1/nginx-custom-ingress-0.0.1.tgz
+    version: 0.0.1
 generated: "2022-04-14T10:54:59.731324204Z"
