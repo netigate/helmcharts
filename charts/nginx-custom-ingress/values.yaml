@@ -1,0 +1,16 @@
+ingressClass:
+services:
+  - name:
+    namespace:
+    service:
+      externalName:
+    ingress:
+      annotations: []
+      host:
+      secretName:
+      paths:
+        path: /
+        backendServicePort:
+    serviceMonitor:
+      enable: false
+      path: /health

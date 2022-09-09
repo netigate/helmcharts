@@ -1,0 +1,11 @@
+{{ range .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  externalName: {{ .service.externalName }}
+  sessionAffinity: None
+  type: ExternalName
+{{ end }}
