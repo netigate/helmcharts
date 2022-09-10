@@ -11,7 +11,7 @@ spec:
   endpoints:
     - interval: 30s
       metricRelabelings:
-        - replacement: {{ if eq .ingress.paths.backendServicePort 443 }}https://{{ else }}http://{{ end }}{{ .service.externalName }}{{ .serviceMonitor.path }}
+        - replacement: {{ .service.externalName }}{{ .serviceMonitor.path }}
           sourceLabels:
             - instance
           targetLabel: instance
@@ -23,7 +23,7 @@ spec:
         module:
           - http_get_2xx
         target:
-          - {{ if eq .ingress.paths.backendServicePort 443 }}https://{{ else }}http://{{ end }}{{ .service.externalName }}{{ .serviceMonitor.path }}
+          - {{ .service.externalName }}{{ .serviceMonitor.path }}
       path: {{ .serviceMonitor.path }}
       port: http
       scheme: http
