@@ -1,7 +1,10 @@
 {{ range .Values.services }}
+---
 apiVersion: v1
 kind: Namespace
 metadata:
+  annotations:
+    kubernetes.io/description: "{{ .description }}"
   labels:
     kubernetes.io/metadata.name: {{ .name }}
   name: {{ .name }}
