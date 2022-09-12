@@ -1,3 +1,7 @@
 services:
   - name:
-    adGroupObjectID:
+    description:
+    roleBinding:
+      enable: true
+      activeDirectory:
+        GroupObjectID:
