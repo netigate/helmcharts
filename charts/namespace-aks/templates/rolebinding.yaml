@@ -12,6 +12,6 @@ roleRef:
 subjects:
   - kind: Group
     namespace: {{ .name }}
-    name: {{ .adGroupObjectID }}
+    name: {{ .roleBinding.activeDirectory.group.objectID }}
 {{ end }}
 {{ end }}
