@@ -275,6 +275,16 @@ entries:
     version: 0.1.5
   nginx-custom-ingress:
   - apiVersion: v2
+    appVersion: 0.0.6
+    created: "2022-09-12T14:00:17.10043063Z"
+    description: desc
+    digest: 1142209db35e1ff6d68100c8d438f415c98b0e52d2cbf7ba385f173c00cf9313
+    name: nginx-custom-ingress
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/nginx-custom-ingress-0.0.6/nginx-custom-ingress-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
     appVersion: 0.0.5
     created: "2022-09-12T10:51:13.969809192Z"
     description: desc
