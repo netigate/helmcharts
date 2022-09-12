@@ -32,7 +32,7 @@ spec:
   jobLabel: prometheus-blackbox
   namespaceSelector:
     matchNames:
-      - {{ .namespace }}
+      - {{ $.Values.namespace }}
   selector:
     matchLabels:
       app.kubernetes.io/name: prometheus-blackbox-exporter
