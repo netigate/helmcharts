@@ -1,7 +1,7 @@
 ingressClass:
+namespace:
 services:
   - name:
-    namespace:
     service:
       externalName:
     ingress:
