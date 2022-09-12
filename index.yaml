@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/helm-test-0.1.10/helm-test-0.1.10.tgz
     version: 0.1.10
+  namespace-aks:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-09-12T07:55:21.066551178Z"
+    description: Create Azure Kubernetes namespace with role binding
+    digest: 6777623fd6b83d7b150b0e5f5a42919c51024a17d6634977b506ec0acf206f13
+    name: namespace-aks
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-aks-0.0.1/namespace-aks-0.0.1.tgz
+    version: 0.0.1
   netigate-template:
   - apiVersion: v2
     appVersion: 1.16.0
