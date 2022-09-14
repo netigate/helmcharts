@@ -1,6 +1,6 @@
-name: mssql-exporter
+name: prometheus-mssql-exporter
 namespace: monitoring
-image: netigate.azurecr.io/sre/prometheus-mssql-exporter
+image: netigate.azurecr.io/sre/prometheus-prometheus-mssql-exporter
 tag: v1.3.0
 
 internalIngress:
