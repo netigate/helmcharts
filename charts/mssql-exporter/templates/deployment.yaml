@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      annotations:
+        netigate/log-format: plaintext
+    spec:
+      serviceAccountName: {{ .Values.name }}
+      imagePullSecrets:
+        - name: netigate
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image }}:{{ .Values.tag }}"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: secrets-mount
+            mountPath: /mnt/secrets-store
+            readOnly: true
+          ports:
+              - name: http
+                containerPort: 4000
+                protocol: TCP
+          env:
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            - name: DEBUG
+              value: app
+      volumes:
+      - name: secrets-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-secret"
