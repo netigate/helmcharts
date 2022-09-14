@@ -334,4 +334,14 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/nginx-custom-ingress-0.0.1/nginx-custom-ingress-0.0.1.tgz
     version: 0.0.1
+  prometheus-mssql-exporter:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-09-14T14:55:04.039503431Z"
+    digest: a5d18e2bbfe154d1439c627dfcc3d5debc1f4dd53fb9109bea8d7af0d0576ddb
+    name: prometheus-mssql-exporter
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
+    version: 0.0.1
 generated: "2022-04-14T10:54:59.731324204Z"
