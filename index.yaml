@@ -347,6 +347,15 @@ entries:
   prometheus-mssql-exporter:
   - apiVersion: v2
     appVersion: 1.17.0
+    created: "2022-09-15T12:54:56.775842494Z"
+    digest: 8d4a12d838ab8afa585f3653697da8cfe4dad4053dc4e33ef86ec9971c9db047
+    name: prometheus-mssql-exporter
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.3/prometheus-mssql-exporter-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 1.17.0
     created: "2022-09-14T15:02:49.707329353Z"
     digest: b91e93fb0a17698d7fe6f0ddba63286a658cdae07ed0db303ce06bb145e3f944
     name: prometheus-mssql-exporter
