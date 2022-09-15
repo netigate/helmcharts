@@ -20,9 +20,7 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
-      {{- if .Values.logging.enabled }}
       annotations:
-        netigate/log-format: {{ .Values.logging.format }}
         {{- if .Values.vault.enabled }}
         vault.hashicorp.com/log-format: json
         vault.hashicorp.com/agent-inject: "true"
@@ -30,7 +28,6 @@ spec:
         vault.hashicorp.com/role: "{{ .Values.name }}"
         vault.hashicorp.com/agent-inject-secret-config: "{{ .Values.vault.team }}/data/{{ .Values.name }}/config"
         {{- end }}
-      {{- end }}
     spec:
       serviceAccountName: {{ .Values.name }}
       {{- with .Values.imagePullSecrets }}

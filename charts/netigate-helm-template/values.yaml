@@ -58,10 +58,6 @@ postgres:
   databaseServer:
   databaseName:
 
-logging:
-  enabled: true
-  format: plaintext
-
 vault:
   enabled: false
   team:
