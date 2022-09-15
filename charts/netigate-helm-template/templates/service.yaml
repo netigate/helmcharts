@@ -18,7 +18,7 @@ spec:
       protocol: TCP
       name: http-metrics
     {{- end }}
-    {{- if .Values.grpc.enabled }}
+    {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
     - port: 443
       targetPort: https
       protocol: TCP

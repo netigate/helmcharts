@@ -2,6 +2,8 @@ name:
 namespace:
 image:
 tag:
+environmentFQDN:
+
 
 replicaCount: 3
 
@@ -17,7 +19,7 @@ resources:
 
 metrics:
   enabled: false
-  containerPort: 
+  containerPort:
 
 livenessProbe:
   enabled: false
@@ -27,13 +29,12 @@ readinessProbe:
 
 ingress:
   enabled: false
-  host: 
+  host:
   contextpath: /
-  tlsSecretName: 
+  tlsSecretName:
 
 internalIngress:
   enabled: false
-  host: 
   contextpath: /
 
 service:
@@ -42,7 +43,11 @@ service:
 grpc:
   enabled: false
   containerPort: 443
-  grpcDomain: 
+
+grpcExt:
+  enabled: false
+  whitelistSourceRange:
+
 
 autoscaling:
   enabled: false
