@@ -7,9 +7,6 @@ replicaCount: 3
 
 imagePullSecrets: []
 
-autoscaling:
-  enabled: false
-
 resources:
   limits:
     cpu: 100m
