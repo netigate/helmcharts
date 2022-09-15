@@ -5,10 +5,8 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-  {{- if or .Values.grpc.enabled .Values.secret .Values.vault.env}}
   annotations:
-    secret.reloader.stakater.com/reload: "{{- if .Values.grpc.enabled }}grpc-wildcard-certificate{{- end }}{{- if and .Values.grpc.enabled .Values.secret }},{{- end }}{{- if .Values.secret }}{{ .Values.name }}{{- end }}{{- if and .Values.grpc.enabled .Values.vault.env }},{{- end }}{{- if .Values.vault.env }}{{ .Values.name }}-secret{{- end }}"
-  {{- end }}
+    reloader.stakater.com/auto: "true"
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -20,9 +18,7 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
-      {{- if .Values.logging.enabled }}
       annotations:
-        netigate/log-format: {{ .Values.logging.format }}
         {{- if .Values.vault.enabled }}
         vault.hashicorp.com/log-format: json
         vault.hashicorp.com/agent-inject: "true"
@@ -30,7 +26,6 @@ spec:
         vault.hashicorp.com/role: "{{ .Values.name }}"
         vault.hashicorp.com/agent-inject-secret-config: "{{ .Values.vault.team }}/data/{{ .Values.name }}/config"
         {{- end }}
-      {{- end }}
     spec:
       serviceAccountName: {{ .Values.name }}
       {{- with .Values.imagePullSecrets }}
@@ -41,7 +36,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.postgres.enabled .Values.vault.env .Values.kafka.enable }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.env .Values.kafka.enable }}
           env:
             {{- if .Values.vault.env }}
             {{- range .Values.vault.env }}
@@ -52,11 +47,9 @@ spec:
                   key: {{ .key }}
             {{- end }}
             {{- end }}
-            {{- if .Values.grpc.enabled }}
-            - name: grpcDomain
-              value: {{ .Values.name }}.{{ .Values.grpc.grpcDomain }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
             - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
-              value: https://{{ .Values.name }}.{{ .Values.grpc.grpcDomain }}:443
+              value: https://+:443
             {{- end }}
             {{- if .Values.postgres.enabled }}
             - name: ConnectionStrings__PostgresContext
@@ -84,7 +77,7 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.grpc.enabled }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
           - name: grpc
             mountPath: /netigate/cert/
             readOnly: true
@@ -119,7 +112,7 @@ spec:
               containerPort: {{ .Values.metrics.containerPort }}
               protocol: TCP
             {{- end }}
-            {{- if .Values.grpc.enabled }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
             - name: https
               containerPort: {{ .Values.grpc.containerPort }}
               protocol: TCP
@@ -141,7 +134,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-      {{- if .Values.grpc.enabled }}
+      {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
       - secret:
           secretName: grpc-wildcard-certificate
         name: grpc
