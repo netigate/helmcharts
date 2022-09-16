@@ -115,7 +115,7 @@ spec:
             name: {{ .Values.name }}
             port:
               number: 80
-        path: /
+        path: {{ .Values.internalIngress.contextpath }}
         pathType: Prefix
   tls:
   - hosts:
