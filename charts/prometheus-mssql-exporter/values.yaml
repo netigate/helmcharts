@@ -10,7 +10,7 @@ internalIngress:
 
 vault:
   enabled: true
-  team: infra-environment
+  team: sre.DeploymentState
   address:
   env:
     - key: PASSWORD
