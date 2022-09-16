@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     release: prometheus
+    team: {{ .Values.team }}
 spec:
   selector:
     matchLabels:

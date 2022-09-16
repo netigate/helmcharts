@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+    team: {{ .Values.team }}
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -18,6 +19,7 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
+        team: {{ .Values.team }}
       annotations:
         {{- if .Values.vault.enabled }}
         vault.hashicorp.com/log-format: json

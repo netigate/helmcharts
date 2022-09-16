@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+    team: {{ .Values.team }}
 spec:
   type: ClusterIP
   ports:

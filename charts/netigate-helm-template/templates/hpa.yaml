@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+    team: {{ .Values.team }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
