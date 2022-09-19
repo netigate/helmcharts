@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
+  annotations:
     reloader.stakater.com/auto: "true"
 spec:
   selector:
