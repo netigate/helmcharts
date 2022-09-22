@@ -75,3 +75,6 @@ kafka:
 
 healthProbe:
   enabled: false
+
+alerts:
+  enabled: true
