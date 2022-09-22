@@ -15,6 +15,8 @@ spec:
   - port: http-metrics
     path: /metrics
     interval: 15s
+  podTargetLabels:
+  - team
 {{- end }}
 ---
 {{- if .Values.healthProbe.enabled }}
