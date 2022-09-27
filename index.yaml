@@ -62,6 +62,17 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/namespace-aks-0.0.1/namespace-aks-0.0.1.tgz
     version: 0.0.1
+  netigate-cronjob:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-09-27T12:56:19.894952339Z"
+    description: A Helm chart template for netigate
+    digest: 6ba930cde794fd4f58b9286a066b912c2b540a96284a01236fc9dadca63b4595
+    name: netigate-cronjob
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-0.0.1/netigate-cronjob-0.0.1.tgz
+    version: 0.0.1
   netigate-template:
   - apiVersion: v2
     appVersion: 1.16.0
