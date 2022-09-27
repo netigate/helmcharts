@@ -1,0 +1,89 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    team: {{ .Values.team }}
+spec:
+  schedule: {{ .Values.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ .Values.name }}
+            team: {{ .Values.team }}
+        spec:
+          serviceAccountName: {{ .Values.name }}
+          containers:
+          - name: {{ .Values.name }}
+            image: "{{ .Values.image }}:{{ .Values.tag }}"
+            imagePullPolicy: IfNotPresent
+            env:
+            {{- if .Values.postgres.enabled }}
+            - name: ConnectionStrings__PostgresContext
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-{{ .Values.postgres.databaseServer }}-{{ .Values.postgres.databaseName }}
+                  key: postgresConnectionString
+            {{- end }}
+            {{- if .Values.vault.env }}
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: EventBus__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: service_uri
+            - name: EventBus__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: username
+            - name: EventBus__SchemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  key: schema_registry_uri
+            {{- end }}
+            volumeMounts:
+              {{- if .Values.vault.env }}
+              - name: secrets-mount
+                mountPath: /mnt/secrets-store
+                readOnly: true
+              {{- end }}
+              {{- if .Values.kafka.enabled }}
+              - name: kafka
+                mountPath: /netigate/kafka/
+                readOnly: true
+              {{- end }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+          restartPolicy: OnFailure
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          volumes:
+          {{- if .Values.vault.env }}
+          - name: secrets-mount
+            csi:
+              driver: secrets-store.csi.k8s.io
+              readOnly: true
+              volumeAttributes:
+                secretProviderClass: "{{ .Values.name }}-secret"
+          {{- end }}
+          {{- if .Values.kafka.enabled }}
+          - secret:
+              secretName: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+            name: kafka
+          {{- end }}
