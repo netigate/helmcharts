@@ -4,7 +4,7 @@ kind: PrometheusRule
 metadata:
   labels:
     release: prometheus
-  name: kubernetespod
+  name: {{ .Values.name }}
   namespace: {{ .Values.namespace }}
 spec:
   groups:
