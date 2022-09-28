@@ -10,7 +10,7 @@ spec:
   groups:
   - name: {{ .Values.name }}
     rules:
-    - alert: KubernetesContainerOomKiller
+    - alert: KubernetesContainerOomKiller-{{ .Values.name }}
       annotations:
         description: "Container {{`{{ $labels.container }}`}} in pod {{`{{ $labels.namespace }}`}}/{{`{{ $labels.pod }}`}} has been OOMKilled {{`{{ $value }}`}} times in the last 10 minutes.\n  VALUE = {{`{{ $value }}`}}\n  LABELS = {{`{{ $labels }}`}}"
         summary: "Kubernetes container oom killer (Namespace: {{`{{ $labels.namespace }}`}} Pod: {{`{{ $labels.pod }}`}})"
@@ -18,7 +18,7 @@ spec:
       for: 0s
       labels:
         severity: {{ .Values.team }}
-    - alert: KubernetesPodNotHealthy
+    - alert: KubernetesPodNotHealthy-{{ .Values.name }}
       annotations:
         description: "Pod has been in a non-ready state for longer than 15 minutes.\n  VALUE = {{`{{ $value }}`}}\n  LABELS = {{`{{ $labels }}`}}"
         summary: "Kubernetes Pod not healthy (Namespace: {{`{{ $labels.namespace }}`}} Pod: {{`{{ $labels.pod }}`}} Status: {{`{{ $labels.phase }}`}})"
@@ -26,7 +26,7 @@ spec:
       for: 0s
       labels:
         severity: {{ .Values.team }}
-    - alert: KubernetesPodCrashLooping
+    - alert: KubernetesPodCrashLooping-{{ .Values.name }}
       annotations:
         description: "Pod {{`{{ $labels.pod }}`}} is crash looping\n  VALUE ={{` {{ $value }}`}}\n  LABELS = {{`{{ $labels }}`}}"
         summary: "Kubernetes pod crash looping (Namespace: {{`{{ $labels.namespace }}`}} Pod: {{`{{ $labels.pod }}`}})"
@@ -35,7 +35,7 @@ spec:
       labels:
         severity: {{ .Values.team }}
 {{- if .Values.healthProbe.enabled }}
-    - alert: BlackboxProbeHttpFailure
+    - alert: BlackboxProbeHttpFailure-{{ .Values.name }}
       annotations:
         description: |-
           HTTP status code is not 200-399
