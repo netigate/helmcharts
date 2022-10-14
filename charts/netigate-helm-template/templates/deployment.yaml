@@ -57,24 +57,29 @@ spec:
             - name: ConnectionStrings__PostgresContext
               valueFrom:
                 secretKeyRef:
-                  name: postgres-{{ .Values.postgres.databaseServer }}-{{ .Values.postgres.databaseName }}
+                  name: {{ .Values.name }}-postgres
                   key: postgresConnectionString
+            - name: generic-psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
             {{- end }}
             {{- if .Values.kafka.enabled }}
             - name: EventBus__BootStrapServers
               valueFrom:
                 secretKeyRef:
-                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  name: {{ .Values.name }}-kafka
                   key: service_uri
             - name: EventBus__SchemaRegistry__Username
               valueFrom:
                 secretKeyRef:
-                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  name: {{ .Values.name }}-kafka
                   key: username
             - name: EventBus__SchemaRegistry__Url
               valueFrom:
                 secretKeyRef:
-                  name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
+                  name: {{ .Values.name }}-kafka
                   key: schema_registry_uri
             {{- end }}
           {{- end }}
@@ -149,8 +154,19 @@ spec:
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-secret"
       {{- end }}
+      {{- if .Values.postgres.enabled }}
+      - name: postgres-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-postgres"
+      {{- end }}
       {{- if .Values.kafka.enabled }}
-      - secret:
-          secretName: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
-        name: kafka
+      - name: kafka
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-kafka"
       {{- end }}
