@@ -59,7 +59,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres
                   key: postgresConnectionString
-            - name: generic-psql-connections-string
+            - name: psql-connections-string
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres
