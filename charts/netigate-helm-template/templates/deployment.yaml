@@ -70,7 +70,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-kafka
-                  key: service_uri
+                  key: service-uri
             - name: EventBus__SchemaRegistry__Username
               valueFrom:
                 secretKeyRef:
@@ -80,7 +80,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-kafka
-                  key: schema_registry_uri
+                  key: schema-registry-uri
             {{- end }}
           {{- end }}
           volumeMounts:
