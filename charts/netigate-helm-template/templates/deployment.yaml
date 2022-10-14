@@ -38,9 +38,9 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.env .Values.kafka.enable }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enable }}
           env:
-            {{- if .Values.vault.env }}
+            {{- if .Values.vault.enabled }}
             {{- range .Values.vault.env }}
             - name: {{ .key }}
               valueFrom:
@@ -94,7 +94,7 @@ spec:
             mountPath: /netigate/kafka/
             readOnly: true
           {{- end }}
-          {{- if .Values.vault.env }}
+          {{- if .Values.vault.enabled }}
           - name: secrets-mount
             mountPath: /mnt/secrets-store
             readOnly: true          
@@ -105,7 +105,7 @@ spec:
             - secretRef:
                 name: {{ .Values.name }}
             {{- end }}
-            {{- if and .Values.enabled .Values.vault.env  }}
+            {{- if and .Values.enabled .Values.vault.enabled  }}
             - secretRef:
                 name: {{ .Values.name }}-secret
             {{- end }}
@@ -146,7 +146,7 @@ spec:
           secretName: grpc-wildcard-certificate
         name: grpc
       {{- end }}
-      {{- if .Values.vault.env }}
+      {{- if .Values.vault.enabled }}
       - name: secrets-mount
         csi:
           driver: secrets-store.csi.k8s.io
