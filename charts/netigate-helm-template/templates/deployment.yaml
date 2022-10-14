@@ -94,6 +94,11 @@ spec:
             mountPath: /netigate/kafka/
             readOnly: true
           {{- end }}
+          {{- if .Values.postgres.enabled }}
+          - name: postgres
+            mountPath: /netigate/postgres/
+            readOnly: true
+          {{- end }}
           {{- if .Values.vault.enabled }}
           - name: secrets-mount
             mountPath: /mnt/secrets-store
@@ -155,7 +160,7 @@ spec:
             secretProviderClass: "{{ .Values.name }}-secret"
       {{- end }}
       {{- if .Values.postgres.enabled }}
-      - name: postgres-mount
+      - name: postgres
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
