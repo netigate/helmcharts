@@ -1,6 +1,9 @@
+onlycerts:
+  namespace: onlycerts
 services:
   - name:
     description:
+    certificates: []
     roleBinding:
       enable: true
       activeDirectory:
