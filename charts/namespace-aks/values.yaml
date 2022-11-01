@@ -1,5 +1,5 @@
 onlycerts:
-  namespace: onlycerts
+  namespace:
 services:
   - name:
     description:
