@@ -13,6 +13,16 @@ entries:
     version: 0.1.10
   namespace-aks:
   - apiVersion: v2
+    appVersion: 1.0.3
+    created: "2022-11-02T17:14:50.540323205Z"
+    description: Create Azure Kubernetes namespace with role binding
+    digest: 6d64dcf04a3ceaef1dfb298016a43e2f5d76fd8058701fc8c95495b96b2907c9
+    name: namespace-aks
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-aks-1.0.3/namespace-aks-1.0.3.tgz
+    version: 1.0.3
+  - apiVersion: v2
     appVersion: 1.0.2
     created: "2022-11-02T16:51:19.942195698Z"
     description: Create Azure Kubernetes namespace with role binding
