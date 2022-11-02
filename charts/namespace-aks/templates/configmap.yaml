@@ -9,5 +9,7 @@ data:
     namespaces:
     {{ range .Values.services -}}
     - name: {{ .name }}
-      certificates: {{ .certificates }}
+      certificates: {{ range .certificates }}
+      - {{ . -}}
+    {{ end }}
     {{ end -}}
