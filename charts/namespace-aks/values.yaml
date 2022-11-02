@@ -1,11 +1,11 @@
 onlycerts:
   namespace:
 services:
-  - name:
-    description:
+  - name: asdasd
+    description: 123
     certificates: []
     roleBinding:
       enable: true
       activeDirectory:
         group:
-          objectID:
+          objectID: 123123123
