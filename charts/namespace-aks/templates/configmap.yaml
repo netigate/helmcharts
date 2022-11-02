@@ -8,6 +8,6 @@ data:
   certmap.yaml: |-
     namespaces:
     {{ range .Values.services -}}
-      - name: {{ .name }}
-        certificates: {{ .certificates | toJson }}
+    - name: {{ .name }}
+      certificates: {{ .certificates | toJson }}
     {{ end -}}
