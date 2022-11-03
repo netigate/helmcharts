@@ -1,9 +1,12 @@
 onlycerts:
   namespace:
+vault:
+  address: https://vault.int.netigate-sre.com
 services:
   - name:
     description:
     certificates:
+    pullSecrets:
     roleBinding:
       enable:
       activeDirectory:
