@@ -1,7 +1,7 @@
 onlycerts:
   namespace:
 vault:
-  address: https://vault.int.netigate-sre.com
+  address:
 services:
   - name:
     description:
