@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-vault
+  namespace: {{ .Values.namespace }}
+spec:
+  ingressClassName: {{ .Values.vault.ingress.ingressClass }}
+  rules:
+    - host: {{ .Values.vault.ingress.hostPrefix }}.{{ .Values.environmentFQDN }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Values.name }}-vault
+                port:
+                  number: {{ .Values.vault.ingress.backendPort }}
+            path: /
+            pathType: Prefix

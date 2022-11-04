@@ -1,0 +1,65 @@
+name:
+namespace:
+image:
+tag:
+team:
+
+onlycertsWeb:
+  image:
+  tag:
+  port:
+
+environmentFQDN:
+
+replicaCount:
+
+imagePullSecrets:
+  - name:
+
+resources:
+  limits:
+    cpu:
+    memory:
+  requests:
+    cpu:
+    memory:
+
+vault:
+  enabled:
+  service:
+    vaultFQDN:
+
+  ingress:
+    hostPrefix:
+    backendPort:
+    ingressClass:
+
+  team:
+  env: []
+
+config:
+  clear_cache_every_n_minutes: # Set to 0 to disable local caching optimisation
+  sync_every_n_minutes:
+  log_level: # one of 10 (debug), 20 (info), 30 (warning), 40 (error), 50 (critical)
+  log_as_json: # Set to false if debugging locally for human-readable log output to terminal
+
+  # False by default. Set to True to disable the looping behavour for scenarios where
+  # you want the program to exit after synchronisation completes. e.g. one-off sync run
+  # locally, or to  integrate cert pushing as part of a CI pipeline instead of an ongoing
+  # service.
+  run_once:
+
+  global_whitelist:
+    - name:
+      rename_to:
+
+  # Don't push certificates to any of these
+  namespace_blacklist: []
+
+  # Which keyvault(s) to fetch certificates from
+  keyvaults:
+    - name:
+      resource_group:
+  k8s_config_keyvault:
+  k8s_config_keyvault_secret_name:
+  k8s_config_persist_changes:
