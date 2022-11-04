@@ -635,6 +635,17 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/nginx-custom-ingress-0.0.1/nginx-custom-ingress-0.0.1.tgz
     version: 0.0.1
+  onlycerts:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-11-04T11:58:33.450556008Z"
+    description: onlycert version 2
+    digest: e220c93a88ed0b26e2e165821a6d6db32a730dc4011adecdceba828b669b249a
+    name: onlycerts
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/onlycerts-1.0.0/onlycerts-1.0.0.tgz
+    version: 1.0.0
   prometheus-mssql-exporter:
   - apiVersion: v2
     appVersion: 1.17.0
