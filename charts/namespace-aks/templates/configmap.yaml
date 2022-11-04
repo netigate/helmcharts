@@ -6,8 +6,10 @@ metadata:
   namespace: {{ .Values.onlycerts.namespace }}
 data:
   certmap.yaml: |-
-    namespaces:
-    {{ range .Values.services -}}
+    namespaces: {{ range .Values.services }}{{ if .certificates }}
     - name: {{ .name }}
-      certificates: {{ .certificates | toJson }}
+      certificates: {{ range .certificates }}
+      - name: {{ . }}
+      {{- end -}}
+      {{- end }}{{ else }} []
     {{ end -}}
