@@ -73,6 +73,10 @@ kafka:
   cluster:
   app:
 
+redis:
+  enabled: false
+  databaseServer:
+
 healthProbe:
   enabled: false
 
