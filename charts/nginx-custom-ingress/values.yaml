@@ -9,8 +9,8 @@ services:
       host:
       secretName:
       paths:
-        path: /
+        path:
         backendServicePort:
     serviceMonitor:
-      enable: false
-      path: /health
+      enable:
+      path:

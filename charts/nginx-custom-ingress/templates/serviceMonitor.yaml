@@ -12,7 +12,7 @@ spec:
   endpoints:
     - interval: 30s
       metricRelabelings:
-        - replacement: {{ .service.externalName }}{{ .serviceMonitor.path }}
+        - replacement: {{ .service.externalName }}{{ if eq .serviceMonitor.path "/"}}{{else}}{{ .ingress.paths.path }}{{end}}{{ .serviceMonitor.path }}
           sourceLabels:
             - instance
           targetLabel: instance
