@@ -75,7 +75,8 @@ kafka:
 
 redis:
   enabled: false
-  databaseServer:
+  instanceName:
+  userName:
 
 healthProbe:
   enabled: false

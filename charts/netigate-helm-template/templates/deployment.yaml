@@ -87,17 +87,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
-                  key: redis-service_uri
-            - name: redis-username
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-redis
-                  key: username
-            - name: redis-password
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-redis
-                  key: password
+                  key: redis-connection-string
             {{- end }}
           {{- end }}
           volumeMounts:
