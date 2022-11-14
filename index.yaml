@@ -186,6 +186,16 @@ entries:
   netigate-template:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-14T09:30:07.438832226Z"
+    description: A Helm chart template for netigate
+    digest: 0eb0441cd5dea54b53c8821bc1917afab75f8eb35b3512b9d88e04aabbbfbad7
+    name: netigate-template
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-2.2.2-beta/netigate-template-2.2.2-beta.tgz
+    version: 2.2.2-beta
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-11T15:20:50.472031323Z"
     description: A Helm chart template for netigate
     digest: 21a02d258f73691b7c99d7cc188f952ad7cbca2067f0a5200eee022b7679b8d7
