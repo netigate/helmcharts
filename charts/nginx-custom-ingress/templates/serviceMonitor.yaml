@@ -6,6 +6,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     release: prometheus
+    team: {{ .team }}
   name: {{ .name }}-health
   namespace: {{ $.Values.namespace }}
 spec:

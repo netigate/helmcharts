@@ -2,6 +2,7 @@ ingressClass:
 namespace:
 services:
   - name:
+    team:
     service:
       externalName:
     ingress:
