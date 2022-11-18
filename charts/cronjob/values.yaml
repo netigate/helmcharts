@@ -1,10 +1,13 @@
-name:
-namespace:
-image:
-tag:
-team:
-environmentFQDN:
+name: apa
+namespace: apa
+image: apa
+tag: 1
+team: apa
+environmentFQDN: test.com
 
+
+successfulJobsHistoryLimit: 1
+failedJobsHistoryLimit: 1
 schedule: "5 4 * * *"
 
 imagePullSecrets: []
@@ -26,3 +29,5 @@ vault:
 
 kafka:
   enabled: false
+
+envVars:

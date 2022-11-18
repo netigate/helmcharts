@@ -8,6 +8,8 @@ metadata:
     team: {{ .Values.team }}
 spec:
   schedule: {{ .Values.schedule }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
@@ -54,6 +56,11 @@ spec:
                 secretKeyRef:
                   name: kafka-{{ .Values.kafka.cluster }}-{{ .Values.kafka.app }}
                   key: schema_registry_uri
+            {{- end }}
+            envFrom:
+            {{- if .Values.envVars }}
+            - configMapRef:
+                name: {{ .Values.name }}-configmap
             {{- end }}
             volumeMounts:
               {{- if .Values.vault.env }}
