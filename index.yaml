@@ -175,6 +175,16 @@ entries:
   netigate-cronjob:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-18T12:35:46.799575146Z"
+    description: A Helm chart template for netigate
+    digest: ad9d417b53f73644f0b79c634fc7eec2b1f791edc06fe61eefe28cc2cc3c7c87
+    name: netigate-cronjob
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-0.2.0/netigate-cronjob-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-09-27T12:56:19.894952339Z"
     description: A Helm chart template for netigate
     digest: 6ba930cde794fd4f58b9286a066b912c2b540a96284a01236fc9dadca63b4595
