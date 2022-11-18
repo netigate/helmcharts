@@ -11,6 +11,7 @@ services:
       secretName:
       paths:
         path:
+        pathType:
         backendServicePort:
     serviceMonitor:
       enable:
