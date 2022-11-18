@@ -1,9 +1,9 @@
-name: apa
-namespace: apa
-image: apa
-tag: 1
-team: apa
-environmentFQDN: test.com
+name: 
+namespace:
+image:
+tag:
+team:
+environmentFQDN:
 
 
 successfulJobsHistoryLimit: 1
