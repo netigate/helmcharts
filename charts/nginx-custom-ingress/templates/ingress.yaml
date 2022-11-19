@@ -23,7 +23,7 @@ spec:
                 port:
                   number: {{ .ingress.paths.backendServicePort }}
             path: {{ .ingress.paths.path }}
-            pathType: {{ .ingress.paths.pathType }}
+            pathType: Prefix
   tls:
     - hosts:
         - {{ .ingress.host }}
