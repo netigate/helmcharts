@@ -88,5 +88,5 @@ alerts:
 envVars:
   enable: false
   env:
-  - name: myFirst
-    data: first
+  - name:
+    data:
