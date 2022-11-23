@@ -1,4 +1,4 @@
-name:
+name: myapp
 namespace:
 image:
 tag:
@@ -28,11 +28,12 @@ readinessProbe:
   enabled: false
 
 ingress:
-  enabled: false
-  host:
-  contextpath: /
-  tlsSecretName:
+  enabled: true
   annotations: []
+  hosts:
+  - host:
+    contextPath:
+    tlsSecretName:
 
 internalIngress:
   enabled: false
@@ -83,3 +84,9 @@ healthProbe:
 
 alerts:
   enabled: true
+
+envVars:
+  enable: false
+  env:
+  - name: myFirst
+    data: first

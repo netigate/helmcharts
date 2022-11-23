@@ -1,0 +1,15 @@
+---
+{{- if .Values.envVars.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-configmap
+  namespace:  {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    team: {{ .Values.team }}
+data:
+  {{- range .Values.envVars.env }}
+  {{ .name }}: {{ .data | quote }}
+  {{- end }}
+{{- end }}
