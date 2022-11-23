@@ -118,7 +118,7 @@ spec:
           {{- end }}
           {{- if or .Values.secret .Values.enabled  }}
           envFrom:
-            {{ if .Values.envVars.enable}}
+            {{ if .Values.envVars}}
             - configMapRef:
                 name: {{ .Values.name }}-configmap
             {{ end }}

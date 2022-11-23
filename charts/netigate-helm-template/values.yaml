@@ -86,7 +86,3 @@ alerts:
   enabled: true
 
 envVars:
-  enable: false
-  env:
-  - name:
-    data:
