@@ -1,4 +1,4 @@
-name: myapp
+name:
 namespace:
 image:
 tag:
