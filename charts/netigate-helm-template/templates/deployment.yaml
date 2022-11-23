@@ -121,6 +121,7 @@ spec:
             {{ if .Values.envVars.enable}}
             - configMapRef:
                 name: {{ .Values.name }}-configmap
+            {{ end }}
             {{- if and .Values.enabled .Values.vault.enabled  }}
             - secretRef:
                 name: {{ .Values.name }}-secret
