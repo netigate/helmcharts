@@ -28,7 +28,7 @@ readinessProbe:
   enabled: false
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: []
   hosts:
   - host:
