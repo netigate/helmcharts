@@ -118,10 +118,10 @@ spec:
           {{- end }}
           {{- if or .Values.secret .Values.enabled  }}
           envFrom:
-            {{- if .Values.secret }}
-            - secretRef:
-                name: {{ .Values.name }}
-            {{- end }}
+            {{ if .Values.envVars}}
+            - configMapRef:
+                name: {{ .Values.name }}-configmap
+            {{ end }}
             {{- if and .Values.enabled .Values.vault.enabled  }}
             - secretRef:
                 name: {{ .Values.name }}-secret
