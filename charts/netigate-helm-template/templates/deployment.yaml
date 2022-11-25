@@ -116,17 +116,15 @@ spec:
             mountPath: /mnt/secrets-store
             readOnly: true          
           {{- end }}
-          {{- if or .Values.secret .Values.enabled  }}
           envFrom:
-            {{ if .Values.envVars}}
+            {{- if .Values.envVars}}
             - configMapRef:
                 name: {{ .Values.name }}-configmap
-            {{ end }}
-            {{- if and .Values.enabled .Values.vault.enabled  }}
+            {{- end }}
+            {{- if  .Values.vault.enabled  }}
             - secretRef:
                 name: {{ .Values.name }}-secret
             {{- end }}
-          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
