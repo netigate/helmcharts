@@ -1,29 +1,30 @@
-{{ range .Values.services }}
+{{ range $svc := .Values.services }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   labels:
-    team: {{ .team }}
+    team: {{ $svc.team }}
   annotations:
-    {{ range .ingress.annotations }}
+    {{ range $svc.ingress.annotations -}}
     {{ . }}
     {{ end }}
-  name: {{ .name }}
+  name: {{ $svc.name }}
   namespace: {{ $.Values.namespace }}
 spec:
   ingressClassName: {{ $.Values.ingressClass}}
   rules:
-    - host: {{ .ingress.host }}
+    - host: {{ $svc.ingress.host }}
       http:
-        paths:
+        paths: {{ range $svc.ingress.backend.paths }}
           - backend:
               service:
-                name: {{ .name }}
+                name: {{ $svc.name }}
                 port:
-                  number: {{ .ingress.paths.backendServicePort }}
-            path: {{ .ingress.paths.path }}
+                  number: {{ $svc.ingress.backend.backendServicePort }}
+            path: {{ . }}
             pathType: Prefix
+            {{- end }}
   tls:
     - hosts:
         - {{ .ingress.host }}

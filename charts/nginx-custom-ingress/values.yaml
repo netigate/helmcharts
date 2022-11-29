@@ -9,9 +9,9 @@ services:
       annotations: []
       host:
       secretName:
-      paths:
-        path:
+      backend:
         backendServicePort:
+        paths: []
     serviceMonitor:
       enable:
       path:
