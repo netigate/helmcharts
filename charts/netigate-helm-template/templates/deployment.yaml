@@ -93,7 +93,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-globalkafka
                   key: username
-            - name: EventBus__Global__chemaRegistry__Url
+            - name: EventBus__Global__SchemaRegistry__Url
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-globalkafka
