@@ -74,6 +74,11 @@ kafka:
   cluster:
   app:
 
+globalKafka:
+  enabled: false
+  cluster:
+  app:
+
 redis:
   enabled: false
   instanceName:

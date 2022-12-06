@@ -38,7 +38,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enable .Values.redis.enabled }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.globalKafka.enabled .Values.redis.enabled }}
           env:
             {{- if .Values.vault.enabled }}
             {{- range .Values.vault.env }}
@@ -82,6 +82,23 @@ spec:
                   name: {{ .Values.name }}-kafka
                   key: schema-registry-uri
             {{- end }}
+            {{- if .Values.globalKafka.enabled }}
+            - name: EventBus__Global__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: service-uri
+            - name: EventBus__Global__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: username
+            - name: EventBus__Global__chemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: schema-registry-uri
+            {{- end }}
             {{- if .Values.redis.enabled }}
             - name: ConnectionServiceURI__RedisContext
               valueFrom:
@@ -99,6 +116,11 @@ spec:
           {{- if .Values.kafka.enabled }}
           - name: kafka
             mountPath: /netigate/kafka/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.globalKafka.enabled }}
+          - name: globalkafka
+            mountPath: /netigate/globalkafka/
             readOnly: true
           {{- end }}
           {{- if .Values.postgres.enabled }}
@@ -184,6 +206,14 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-kafka"
+      {{- end }}
+      {{- if .Values.globalKafka.enabled }}
+      - name: globalkafka
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-globalkafka"
       {{- end }}
       {{- if .Values.redis.enabled }}
       - name: redis
