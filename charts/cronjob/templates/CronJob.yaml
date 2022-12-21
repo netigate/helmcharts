@@ -8,6 +8,7 @@ metadata:
     team: {{ .Values.team }}
 spec:
   schedule: "{{ .Values.schedule }}"
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
   failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
   jobTemplate:
@@ -18,7 +19,11 @@ spec:
             app: {{ .Values.name }}
             team: {{ .Values.team }}
         spec:
+          {{- if not .Values.existingServiceAccount }}
           serviceAccountName: {{ .Values.name }}
+          {{- else }}
+          serviceAccountName: {{ .Values.existingServiceAccount }}
+          {{- end }}
           containers:
           - name: {{ .Values.name }}
             image: "{{ .Values.image }}:{{ .Values.tag }}"

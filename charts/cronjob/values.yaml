@@ -5,7 +5,9 @@ tag:
 team:
 environmentFQDN:
 
+existingServiceAccount:
 
+concurrencyPolicy: Allow
 successfulJobsHistoryLimit: 1
 failedJobsHistoryLimit: 1
 schedule: "5 4 * * *"
