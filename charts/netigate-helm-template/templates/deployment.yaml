@@ -167,6 +167,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -174,6 +175,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
