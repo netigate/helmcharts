@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  cert-fetcher:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-12-30T14:23:50.066220331Z"
+    description: Dependency for Vault secret injection to kubernetes objects
+    digest: b84628be85718575e494481235c9721cea31922c2ce35ae78e064f5b73a3fca8
+    name: cert-fetcher
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/cert-fetcher-0.0.1/cert-fetcher-0.0.1.tgz
+    version: 0.0.1
   helm-test:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -933,4 +944,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2022-12-30T07:50:27.485749282Z"
+generated: "2022-12-30T14:23:50.066496343Z"
