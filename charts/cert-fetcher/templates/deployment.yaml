@@ -1,0 +1,36 @@
+{{- if .Values.certificates }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values._internal_name}}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{.Values._internal_name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values._internal_name}}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{.Values._internal_name}}
+    spec:
+      serviceAccountName: {{.Values._internal_name}}
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: Always
+        name: {{.Values._internal_name}}
+        volumeMounts:
+        - name: secrets-mount
+          mountPath: "/mnt/dummy"
+          readOnly: true
+      volumes:
+        - name: secrets-mount
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: cert-fetcher
+{{- end }}

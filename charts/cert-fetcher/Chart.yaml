@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cert-fetcher
+description: Dependency for Vault secret injection to kubernetes objects
+type: application
+version: 0.0.1
+appVersion: "0.0.1"

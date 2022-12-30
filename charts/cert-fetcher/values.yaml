@@ -1,0 +1,6 @@
+vaultAddress:
+_internal_name: cert-fetcher
+namespace:
+name:
+certificates:
+  - vaultSecretName:
