@@ -1,6 +1,9 @@
-vaultAddress:
-_internal_name: cert-fetcher
-namespace:
-name:
+vaultAddress: https://vault.infra.netigate-acre.com
+_internal_name: vault-fetcher
+namespace: cert-fetcher
+name: acre-app
 certificates:
-  - vaultSecretName:
+  - vaultSecretName: netigate-acre-com
+  - vaultSecretName: wildcard-int-netigate-acre-com
+imagePullSecrets:
+  - vaultSecretName: netigate

@@ -92,7 +92,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.name }}.grcp.ext.{{ .Values.environmentFQDN }}
-    secretName: grpc-wildcard-certificate
+    secretName: wildcard-grpc-ext-netigate-acre-com
 {{- end }}
 ---
 {{- if .Values.internalIngress.enabled }}

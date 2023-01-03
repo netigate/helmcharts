@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Values._internal_name}}
+  name: {{.Values._internal_name}}-{{.Values.name}}
   namespace: {{ .Values.namespace }}
   labels:
     app: {{.Values._internal_name}}
@@ -17,7 +17,7 @@ spec:
       labels:
         app: {{.Values._internal_name}}
     spec:
-      serviceAccountName: {{.Values._internal_name}}
+      serviceAccountName: {{.Values._internal_name}}-{{.Values.name}}
       containers:
       - image: nginx:latest
         imagePullPolicy: Always
@@ -32,5 +32,5 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: cert-fetcher
+              secretProviderClass: {{.Values._internal_name}}
 {{- end }}
