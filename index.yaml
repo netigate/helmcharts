@@ -267,6 +267,16 @@ entries:
   netigate-template:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-01-03T10:24:37.115061641Z"
+    description: A Helm chart template for netigate
+    digest: bc199a172182cfe693a411ecb128caa8e90b1e0f4b5662f134f6518178fcda7c
+    name: netigate-template
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-3.1.5/netigate-template-3.1.5.tgz
+    version: 3.1.5
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-12-30T07:50:27.485296158Z"
     description: A Helm chart template for netigate
     digest: f5ed76a4ea4e090ced9a5b9da4e4558dda23dd3b68a1cc39f5b05f0f681e862e
@@ -944,4 +954,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2022-12-30T14:23:50.066496343Z"
+generated: "2023-01-03T10:24:37.115321452Z"
