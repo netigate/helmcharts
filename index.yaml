@@ -183,6 +183,17 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/namespace-aks-0.0.1/namespace-aks-0.0.1.tgz
     version: 0.0.1
+  namespace-v2:
+  - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2023-01-03T10:26:06.887324213Z"
+    description: Create Azure Kubernetes namespace for v2 type environment
+    digest: 10274948cd352e30308b4a5dd873b1aebcd1d7a801bbda14e72d1e8ab48b1508
+    name: namespace-v2
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-v2-0.0.3/namespace-v2-0.0.3.tgz
+    version: 0.0.3
   netigate-cronjob:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -954,4 +965,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2023-01-03T10:24:37.115321452Z"
+generated: "2023-01-03T10:26:06.887873523Z"
