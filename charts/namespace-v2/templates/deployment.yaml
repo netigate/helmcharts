@@ -1,0 +1,36 @@
+{{ range .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-fetcher
+  namespace: {{ .name }}
+  labels:
+    app: vault-fetcher
+spec:
+  selector:
+    matchLabels:
+      app: vault-fetcher
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault-fetcher
+    spec:
+      serviceAccountName: vault-fetcher
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: Always
+        name: vault-fetcher
+        volumeMounts:
+        - name: secrets-mount
+          mountPath: "/mnt/dummy"
+          readOnly: true
+      volumes:
+        - name: secrets-mount
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: vault-fetcher
+{{- end }}
