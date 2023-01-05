@@ -100,27 +100,27 @@ spec:
                   key: schema-registry-uri
             {{- end }}
             {{- if .Values.redis.enabled }}
-            - name: ConnectionServiceURI__RedisContext
+            - name: RedisContext__ConnectionServiceURI
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-string
-            - name: ConnectionUser__RedisContext
+            - name: RedisContext__ConnectionUser
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-user
-            - name: ConnectionPassword__RedisContext
+            - name: RedisContext__ConnectionPassword
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-password
-            - name: ConnectionHost__RedisContext
+            - name: RedisContext__ConnectionHost
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-host
-            - name: ConnectionPort__RedisContext
+            - name: RedisContext__ConnectionPort
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
