@@ -105,6 +105,26 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-string
+            - name: ConnectionUser__RedisContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-user
+            - name: ConnectionPassword__RedisContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-password
+            - name: ConnectionHost__RedisContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-host
+            - name: ConnectionPort__RedisContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-port
             {{- end }}
           {{- end }}
           volumeMounts:
