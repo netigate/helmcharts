@@ -6,9 +6,7 @@ metadata:
   labels:
     team: {{ $svc.team }}
   annotations:
-    {{ range $svc.ingress.annotations -}}
-    {{ . }}
-    {{ end }}
+{{ toYaml  $svc.ingress.annotations | indent 4 }}
   name: {{ $svc.name }}
   namespace: {{ $.Values.namespace }}
 spec:

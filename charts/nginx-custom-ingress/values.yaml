@@ -6,7 +6,7 @@ services:
     service:
       externalName:
     ingress:
-      annotations: []
+      annotations: {}
       host:
       secretName:
       backend:
