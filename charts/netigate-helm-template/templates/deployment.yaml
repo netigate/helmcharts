@@ -6,6 +6,9 @@ metadata:
   labels:
     app: {{ .Values.name }}
     team: {{ .Values.team }}
+    {{- range $key, $val := .Values.metadata.labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end }}
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -15,11 +18,17 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.name }}
+      {{- range $key, $val := .Values.selector.matchLabels }}
+      {{ $key }}: {{ $val | quote }}
+      {{- end }}
   template:
     metadata:
       labels:
         app: {{ .Values.name }}
         team: {{ .Values.team }}
+        {{- range $key, $val := .Values.metadata.labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
       annotations:
         {{- if .Values.vault.enabled }}
         vault.hashicorp.com/log-format: json
@@ -40,6 +49,12 @@ spec:
           imagePullPolicy: IfNotPresent
           {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.globalKafka.enabled .Values.redis.enabled }}
           env:
+            {{- range $v := .Values.fieldRefs }}
+            - name: {{ $v.name }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: {{ $v.data }}
+            {{- end }}
             {{- if .Values.vault.enabled }}
             {{- range .Values.vault.env }}
             - name: {{ .key }}

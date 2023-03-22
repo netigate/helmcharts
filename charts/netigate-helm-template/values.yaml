@@ -9,6 +9,12 @@ replicaCount: 3
 
 imagePullSecrets: []
 
+metadata:
+  labels:
+
+selector:
+  matchLabels:
+
 resources:
   limits:
     cpu: 100m
@@ -91,3 +97,5 @@ alerts:
   enabled: true
 
 envVars:
+
+fieldRefs:
