@@ -47,7 +47,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.redis.enabled }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
           env:
             {{- range $v := .Values.fieldRefs }}
             - name: {{ $v.name }}
@@ -124,6 +124,28 @@ spec:
                   name: {{ .Values.name }}-redis
                   key: redis-connection-port
             {{- end }}
+            {{- if .Values.opensearch.enabled }}
+            - name: OpensearchContext__ConnectionUser
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-user
+            - name: OpensearchContext__ConnectionPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-password
+            - name: OpensearchContext__ConnectionHost
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-host
+            - name: OpensearchContext__ConnectionPort
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-port
+            {{- end }}
           {{- end }}
           volumeMounts:
           {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
@@ -144,6 +166,11 @@ spec:
           {{- if .Values.redis.enabled }}
           - name: redis
             mountPath: /netigate/redis/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.opensearch.enabled }}
+          - name: opensearch
+            mountPath: /netigate/opensearch/
             readOnly: true
           {{- end }}
           {{- if .Values.vault.enabled }}
@@ -229,4 +256,12 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-redis"
+      {{- end }}
+      {{- if .Values.opensearch.enabled }}
+      - name: opensearch
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-opensearch"
       {{- end }}

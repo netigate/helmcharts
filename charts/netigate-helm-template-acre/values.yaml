@@ -85,6 +85,11 @@ redis:
   instanceName:
   userName:
 
+opensearch:
+  enabled: false
+  instanceName: xxxxxxxx
+  userName: useruser
+
 healthProbe:
   enabled: false
 
