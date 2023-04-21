@@ -1,0 +1,8 @@
+name: service-name
+naemspace: elysium
+environmentFQDN: netigate-dev.com
+
+postgres:
+  enabled: true:
+  databaseServer: server-name
+  DatabaseName: database-name
