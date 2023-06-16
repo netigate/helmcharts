@@ -2,5 +2,5 @@ apiVersion: v2
 description: desc
 name: nginxCustomIngress
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: "2.0.0"

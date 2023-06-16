@@ -12,7 +12,7 @@ metadata:
 spec:
   ingressClassName: {{ $.Values.ingressClass}}
   rules:
-    - host: {{ $svc.ingress.host }}
+    - host: "{{ $svc.ingress.host }}"
       http:
         paths: {{ range $svc.ingress.backend.paths }}
           - backend:
@@ -25,6 +25,6 @@ spec:
             {{- end }}
   tls:
     - hosts:
-        - {{ .ingress.host }}
+        - "{{ .ingress.host }}"
       secretName: {{ .ingress.secretName }}
 {{ end }}
