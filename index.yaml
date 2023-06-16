@@ -941,6 +941,16 @@ entries:
   nginxCustomIngress:
   - apiVersion: v2
     appVersion: 2.0.0
+    created: "2023-06-16T09:48:29.548090663Z"
+    description: desc
+    digest: 0ea208909a12f97bbf6bd259a65a0b9c9d0b14d95b571a0f99c445c20fa0ea39
+    name: nginxCustomIngress
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/nginxCustomIngress-3.0.1/nginxCustomIngress-3.0.1.tgz
+    version: 3.0.1
+  - apiVersion: v2
+    appVersion: 2.0.0
     created: "2023-02-06T12:53:43.278430659Z"
     description: desc
     digest: b5e1ce460f70f9cc029be3f5d79059e0b5bbcddfe8354376c248bc546a112493
@@ -1046,4 +1056,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2023-05-17T08:32:35.150674339Z"
+generated: "2023-06-16T09:48:29.548598667Z"
