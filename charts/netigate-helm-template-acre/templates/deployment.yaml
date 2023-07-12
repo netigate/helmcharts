@@ -72,6 +72,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres
                   key: generic-psql-connections-string
+            - name: direct-psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-psql-connections-string
+            - name: direct-generic-psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-generic-psql-connections-string
             {{- end }}
             {{- if .Values.kafka.enabled }}
             - name: EventBus__BootStrapServers
@@ -169,7 +179,7 @@ spec:
           {{- if .Values.vault.enabled }}
           - name: secrets-mount
             mountPath: /mnt/secrets-store
-            readOnly: true          
+            readOnly: true
           {{- end }}
           envFrom:
             {{- if .Values.envVars}}
