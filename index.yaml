@@ -278,6 +278,16 @@ entries:
   netigate-cronjob-acre:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-08-28T08:06:45.92992234Z"
+    description: A Helm chart template for netigate
+    digest: cf22f94c3d689c25c9e8998cd6e59bc0ef32c8bf8a49f4ce8b0a651072cbf6c7
+    name: netigate-cronjob-acre
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-acre-1.0.3/netigate-cronjob-acre-1.0.3.tgz
+    version: 1.0.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-08-28T06:20:02.952527961Z"
     description: A Helm chart template for netigate
     digest: bd14d7a451f26de7aa17da6275573a1e36881e72e01170a891eab42fd8456e23
@@ -1097,4 +1107,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2023-08-28T06:20:02.952839859Z"
+generated: "2023-08-28T08:06:45.93131466Z"
