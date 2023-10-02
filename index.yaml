@@ -185,6 +185,16 @@ entries:
     version: 0.0.1
   namespace-v2:
   - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-10-02T12:16:30.919474393Z"
+    description: Create Azure Kubernetes namespace for v2 type environment
+    digest: 858c1b7236d364534e60de0cbeb2c3a2d67448d327d072ff072ad7c191df24dd
+    name: namespace-v2
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-v2-0.1.0/namespace-v2-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     appVersion: 0.0.3
     created: "2023-01-03T10:26:06.887324213Z"
     description: Create Azure Kubernetes namespace for v2 type environment
@@ -1137,4 +1147,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2023-09-01T05:39:30.227747848Z"
+generated: "2023-10-02T12:16:30.919833796Z"
