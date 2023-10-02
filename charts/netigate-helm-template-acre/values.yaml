@@ -98,3 +98,6 @@ alerts:
 envVars:
 
 fieldRefs:
+
+otlp:
+  enabled: false
