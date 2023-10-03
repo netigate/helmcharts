@@ -24,16 +24,15 @@ spec:
   template:
     metadata:
       labels:
-        annotations:
-          {{ if .Values.otlp.enabled }}
-          sidecar.opentelemetry.io/inject: "true"
-          {{- end }}
         app: {{ .Values.name }}
         team: {{ .Values.team }}
         {{- range $key, $val := .Values.metadata.labels }}
         {{ $key }}: {{ $val | quote }}
         {{- end }}
       annotations:
+      {{- if .Values.otlp.enabled }}
+        sidecar.opentelemetry.io/inject: "true"
+      {{- end }}
     spec:
       serviceAccountName: {{ .Values.name }}
       {{- with .Values.imagePullSecrets }}
