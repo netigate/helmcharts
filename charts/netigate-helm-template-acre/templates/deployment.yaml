@@ -228,7 +228,7 @@ spec:
       volumes:
       {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
       - secret:
-          secretName: grpc-wildcard-certificate
+          secretName: wildcard.{{.Values.environmentFQDN}}
         name: grpc
       {{- end }}
       {{- if .Values.vault.enabled }}
