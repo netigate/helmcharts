@@ -5,7 +5,7 @@ tag:
 team:
 environmentFQDN:
 
-existingServiceAccount: false
+existingServiceAccount:
 
 concurrencyPolicy: Allow
 successfulJobsHistoryLimit: 1
