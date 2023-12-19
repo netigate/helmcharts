@@ -210,7 +210,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.livenessProbe.path | default "/health" }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
@@ -218,7 +218,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.readinessProbe.path | default "/health" }}
               port: http
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
