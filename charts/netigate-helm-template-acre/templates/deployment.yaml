@@ -39,6 +39,28 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+        {{- range .Values.initContainers }}
+        - name: {{ .name }}
+          image: {{ .image }}
+          imagePullPolicy: IfNotPresent
+          command:
+          {{- range $c := .commands }}
+            - {{ $c }}
+          {{- end }}
+          env:
+          {{- range .env }}
+            - name: {{ .name }}
+            {{- if .data }}
+              value: {{ .data | quote }}
+            {{- else }}
+              valueFrom:
+                {{ .valueFrom }}:
+                  name: {{ .refName }}
+                  key: {{ .name | quote }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
