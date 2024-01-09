@@ -92,6 +92,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres
                   key: psql-connections-string
+            - name: ConnectionStrings__PostgresContextGeneric
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
             - name: psql-connections-string
               valueFrom:
                 secretKeyRef:
