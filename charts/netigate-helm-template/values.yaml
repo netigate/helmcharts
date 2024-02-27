@@ -1,9 +1,9 @@
-name: myapp1
-namespace: mynamepsace
-image: nginx
-tag: latest
-environmentFQDN: netigate.se
-team: sre
+name: 
+namespace:
+image:
+tag:
+environmentFQDN:
+team:
 
 replicaCount: 3
 
