@@ -1,3 +1,4 @@
+{{- if not .Values.migration.disable_app }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -27,3 +28,4 @@ spec:
     {{- end }}
   selector:
     app: {{ .Values.name }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if not .Values.migration.disable_app }}
 {{- if .Values.metrics.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -55,4 +56,5 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: prometheus-blackbox-exporter
+{{- end }}
 {{- end }}

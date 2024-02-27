@@ -1,40 +1,49 @@
-{{- if not .Values.migration.ingress.enabled }}
-{{- if .Values.ingress.enabled }}
+{{- if .Values.migration.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Values.name}}
   namespace: {{ .Values.namespace }}
   annotations:
-{{ toYaml  .Values.ingress.annotations | indent 4 }}
+{{ toYaml  .Values.migration.ingress.annotations | indent 4 }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx
-  rules: {{ range .Values.ingress.hosts}}
+  rules: {{ range .Values.migration.ingress.hosts}}
   - host: {{ .host }}
     http:
       paths:
       - backend:
           service:
-            name: {{ $.Values.name }}
+            name: {{ $.Values.name }}-migration
             port:
-              number: 80
+              number: 443
         path: {{ .contextPath }}
         pathType: Prefix
   {{- end }}
-  tls:{{range .Values.ingress.hosts}}
+  tls:{{range .Values.migration.ingress.hosts}}
   - hosts:
     - {{ .host }}
     secretName: {{ .tlsSecretName }}
     {{- end }}
-{{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-migration
+  namespace: {{ .Values.namespace }}
+spec:
+  externalName: {{ .Values.migration.host }}
+  sessionAffinity: None
+  type: ExternalName
 {{- end }}
 ---
-{{- if .Values.grpc.enabled }}
+{{- if .Values.migration.grpc.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}-grpcint
+  name: {{ .Values.name }}-grpcint-migration
   namespace: {{ .Values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -50,22 +59,32 @@ spec:
       paths:
       - backend:
           service:
-            name: {{ .Values.name }}
+            name: {{ .Values.name }}-grpcint-migration
             port:
               number: 443
         path: /
         pathType: Prefix
   tls:
   - hosts:
-    - {{ .Values.name }}.grpc.{{ .Values.environmentFQDN }}
+    - {{ .Values.name }}.grpc.{{ .Values.migration.host }}
     secretName: grpc-wildcard-certificate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-grpcint-migration
+  namespace: {{ .Values.namespace }}
+spec:
+  externalName: {{ .Values.name }}.grpc.{{ .Values.migration.host }}
+  sessionAffinity: None
+  type: ExternalName
 {{- end }}
 ---
-{{- if .Values.grpcExt.enabled }}
+{{- if .Values.migration.grpcExt.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}-grpcext
+  name: {{ .Values.name }}-grpcext-migration
   namespace: {{ .Values.namespace }}
   annotations:
     {{- range .Values.grpcExt.annotations }}
@@ -84,7 +103,7 @@ spec:
       paths:
       - backend:
           service:
-            name: {{ .Values.name }}
+            name: {{ .Values.name }}-grpcext-migration
             port:
               number: 443
         path: /
@@ -93,19 +112,30 @@ spec:
   - hosts:
     - {{ .Values.name }}.grcp.ext.{{ .Values.environmentFQDN }}
     secretName: grpc-wildcard-certificate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-grpcext-migration
+  namespace: {{ .Values.namespace }}
+spec:
+  externalName: {{ .Values.name }}.grcp.ext.{{ .Values.migration.host }}
+  sessionAffinity: None
+  type: ExternalName
 {{- end }}
 ---
-{{- if .Values.internalIngress.enabled }}
+{{- if .Values.migration.internalIngress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.name }}-int
+  name: {{ .Values.name }}-int-migration
   namespace: {{ .Values.namespace }}
   annotations:
     {{- range .Values.internalIngress.annotations }}
     {{ . }}
     {{- end }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx-internal
   rules:
@@ -114,13 +144,23 @@ spec:
       paths:
       - backend:
           service:
-            name: {{ .Values.name }}
+            name: {{ .Values.name }}-int-migration
             port:
-              number: 80
+              number: 443
         path: {{ .Values.internalIngress.contextpath }}
         pathType: Prefix
   tls:
   - hosts:
     - {{ .Values.name }}.int.{{ .Values.environmentFQDN }}
     secretName: int-wildcard-certificate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-int-migration
+  namespace: {{ .Values.namespace }}
+spec:
+  externalName: {{ .Values.name }}.int.{{ .Values.migration.host }}
+  sessionAffinity: None
+  type: ExternalName
 {{- end }}
