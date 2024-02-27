@@ -1,4 +1,5 @@
 ---
+{{- if not .Values.migration.disable_app }}
 {{- if .Values.envVars }}
 apiVersion: v1
 kind: ConfigMap
@@ -12,4 +13,5 @@ data:
   {{- range .Values.envVars }}
   {{ .name }}: {{ .data | quote }}
   {{- end }}
+{{- end }}
 {{- end }}
