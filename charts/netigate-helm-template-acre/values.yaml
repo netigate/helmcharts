@@ -41,7 +41,8 @@ ingress:
     tlsSecretName:
 
 internalIngress:
-  enabled: false
+  enabled: enable
+  host:
   contextpath: /
   annotations: []
 
@@ -49,12 +50,14 @@ service:
   containerPort: 80
 
 grpc:
-  enabled: false
+  enabled: enable
+  host:
   containerPort: 443
   annotations: []
 
 grpcExt:
-  enabled: false
+  enabled: enable
+  host:
   whitelistSourceRange:
   annotations: []
 
@@ -86,8 +89,8 @@ redis:
 
 opensearch:
   enabled: false
-  instanceName: xxxxxxxx
-  userName: useruser
+  instanceName:
+  userName:
 
 healthProbe:
   enabled: false
