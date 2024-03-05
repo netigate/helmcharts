@@ -41,7 +41,7 @@ ingress:
     tlsSecretName:
 
 internalIngress:
-  enabled: enable
+  enabled: false
   host:
   contextpath: /
   annotations: []
@@ -50,13 +50,13 @@ service:
   containerPort: 80
 
 grpc:
-  enabled: enable
+  enabled: false
   host:
   containerPort: 443
   annotations: []
 
 grpcExt:
-  enabled: enable
+  enabled: false
   host:
   whitelistSourceRange:
   annotations: []
