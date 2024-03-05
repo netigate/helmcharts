@@ -43,7 +43,7 @@ metadata:
 spec:
   ingressClassName: nginx-internal
   rules:
-  - host: {{ .Values.name }}.grpc.{{ .Values.environmentFQDN }}
+  - host: {{ .Values.name }}.grpc.{{ .Values.grpc.host }}
     http:
       paths:
       - backend:
@@ -55,8 +55,8 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - {{ .Values.name }}.grpc.{{ .Values.environmentFQDN }}
-    secretName: wildcard.{{.Values.environmentFQDN}}
+    - {{ .Values.name }}.grpc.{{ .Values.grpc.host }}
+    secretName: wildcard.{{ .Values.grpc.host }}
 {{- end }}
 ---
 {{- if .Values.grpcExt.enabled }}
@@ -77,7 +77,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: {{ .Values.name }}.grpc.ext.{{ .Values.environmentFQDN }}
+  - host: {{ .Values.name }}.grpc.ext.{{ .Values.grpcExt.host }}
     http:
       paths:
       - backend:
@@ -89,8 +89,8 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - {{ .Values.name }}.grcp.ext.{{ .Values.environmentFQDN }}
-    secretName: wildcard.{{.Values.environmentFQDN}}
+    - {{ .Values.name }}.grcp.ext.{{ .Values.grpcExt.host }}
+    secretName: wildcard.{{ .Values.grpcExt.host }}
 {{- end }}
 ---
 {{- if .Values.internalIngress.enabled }}
@@ -107,7 +107,7 @@ metadata:
 spec:
   ingressClassName: nginx-internal
   rules:
-  - host: {{ .Values.name }}.int.{{ .Values.environmentFQDN }}
+  - host: {{ .Values.name }}.int.{{ .Values.internalIngress.host }}
     http:
       paths:
       - backend:
@@ -119,6 +119,6 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - {{ .Values.name }}.int.{{ .Values.environmentFQDN }}
-    secretName: wildcard.{{.Values.environmentFQDN}}
+    - {{ .Values.name }}.int.{{ .Values.internalIngress.host }}
+    secretName: wildcard.{{ .Values.internalIngress.host }}
 {{- end }}
