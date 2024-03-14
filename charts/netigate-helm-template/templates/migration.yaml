@@ -5,7 +5,9 @@ metadata:
   name: {{ .Values.name}}
   namespace: {{ .Values.namespace }}
   annotations:
-{{ toYaml  .Values.migration.ingress.annotations | indent 4 }}
+{{- if .Values.migration.ingress.annotations }}
+{{ toYaml .Values.migration.ingress.annotations | indent 4 }}
+{{- end }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
