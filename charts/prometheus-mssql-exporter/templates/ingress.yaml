@@ -1,0 +1,27 @@
+{{ if .Values.internalIngress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx-internal
+  rules:
+  - host: {{ .Values.name }}.{{ .Values.internalIngress.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.name }}.{{ .Values.internalIngress.host }}
+    secretName: int-wildcard-certificate
+{{ end }}

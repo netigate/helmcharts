@@ -1,0 +1,268 @@
+{{- if not .Values.migration.disable_app }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    team: {{ .Values.team }}
+    {{- range $key, $val := .Values.metadata.labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end }}
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+      {{- range $key, $val := .Values.selector.matchLabels }}
+      {{ $key }}: {{ $val | quote }}
+      {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        team: {{ .Values.team }}
+        {{- range $key, $val := .Values.metadata.labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
+      annotations:
+        {{- if .Values.vault.enabled }}
+        vault.hashicorp.com/log-format: json
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/role: "{{ .Values.name }}"
+        vault.hashicorp.com/agent-inject-secret-config: "{{ .Values.vault.team }}/data/{{ .Values.name }}/config"
+        {{- end }}
+    spec:
+      serviceAccountName: {{ .Values.name }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image }}:{{ .Values.tag }}"
+          imagePullPolicy: IfNotPresent
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.globalKafka.enabled .Values.redis.enabled }}
+          env:
+            {{- range $v := .Values.fieldRefs }}
+            - name: {{ $v.name }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: {{ $v.data }}
+            {{- end }}
+            {{- if .Values.vault.enabled }}
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+            - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
+              value: https://+:443
+            {{- end }}
+            {{- if .Values.postgres.enabled }}
+            - name: ConnectionStrings__PostgresContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: psql-connections-string
+            - name: psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
+            {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: EventBus__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: service-uri
+            - name: EventBus__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: username
+            - name: EventBus__SchemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: schema-registry-uri
+            {{- end }}
+            {{- if .Values.globalKafka.enabled }}
+            - name: EventBus__Global__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: service-uri
+            - name: EventBus__Global__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: username
+            - name: EventBus__Global__SchemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-globalkafka
+                  key: schema-registry-uri
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: RedisContext__ConnectionServiceURI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-string
+            - name: RedisContext__ConnectionUser
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-user
+            - name: RedisContext__ConnectionPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-password
+            - name: RedisContext__ConnectionHost
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-host
+            - name: RedisContext__ConnectionPort
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-port
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+          - name: grpc
+            mountPath: /netigate/cert/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.kafka.enabled }}
+          - name: kafka
+            mountPath: /netigate/kafka/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.globalKafka.enabled }}
+          - name: globalkafka
+            mountPath: /netigate/globalkafka/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.postgres.enabled }}
+          - name: postgres
+            mountPath: /netigate/postgres/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.redis.enabled }}
+          - name: redis
+            mountPath: /netigate/redis/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.vault.enabled }}
+          - name: secrets-mount
+            mountPath: /mnt/secrets-store
+            readOnly: true          
+          {{- end }}
+          envFrom:
+            {{- if .Values.envVars}}
+            - configMapRef:
+                name: {{ .Values.name }}-configmap
+            {{- end }}
+            {{- if  .Values.vault.enabled  }}
+            - secretRef:
+                name: {{ .Values.name }}-secret
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.metrics.containerPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+            - name: https
+              containerPort: {{ .Values.grpc.containerPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path | default "/health" }}
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path | default "/health" }}
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+      - secret:
+          secretName: grpc-wildcard-certificate
+        name: grpc
+      {{- end }}
+      {{- if .Values.vault.enabled }}
+      - name: secrets-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-secret"
+      {{- end }}
+      {{- if .Values.postgres.enabled }}
+      - name: postgres
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-postgres"
+      {{- end }}
+      {{- if .Values.kafka.enabled }}
+      - name: kafka
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-kafka"
+      {{- end }}
+      {{- if .Values.globalKafka.enabled }}
+      - name: globalkafka
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-globalkafka"
+      {{- end }}
+      {{- if .Values.redis.enabled }}
+      - name: redis
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-redis"
+      {{- end }}
+{{- end }}

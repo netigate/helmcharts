@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: {{ .Values.name }}-web
+  namespace: {{ $.Values.namespace }}
+spec:
+  ingressClassName: nginx-internal
+  rules:
+    - host: certificates.int.{{ .Values.environmentFQDN }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Values.name }}-web
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - certificates.int.{{ .Values.environmentFQDN }}
+      secretName: int-wildcard-certificate

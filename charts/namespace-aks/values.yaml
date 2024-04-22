@@ -1,0 +1,14 @@
+onlycerts:
+  namespace:
+vault:
+  address:
+services:
+  - name:
+    description:
+    certificates:
+    pullSecrets:
+    roleBinding:
+      enable:
+      activeDirectory:
+        group:
+          objectID:

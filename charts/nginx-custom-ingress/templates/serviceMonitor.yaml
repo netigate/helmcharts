@@ -1,0 +1,41 @@
+{{ range .Values.services}}
+{{ if .serviceMonitor.enable }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: prometheus
+    team: {{ .team }}
+  name: {{ .name }}-health
+  namespace: {{ $.Values.namespace }}
+spec:
+  endpoints:
+    - interval: 30s
+      metricRelabelings:
+        - replacement: {{ .service.externalName }}{{ if eq .serviceMonitor.path "/"}}{{else}}{{ .ingress.paths.path }}{{end}}{{ .serviceMonitor.path }}
+          sourceLabels:
+            - instance
+          targetLabel: instance
+        - replacement: {{ .ingress.host }}
+          sourceLabels:
+            - target
+          targetLabel: target
+      params:
+        module:
+          - http_get_2xx
+        target:
+          - {{ .service.externalName }}{{ .serviceMonitor.path }}
+      path: {{ .serviceMonitor.path }}
+      port: http
+      scheme: http
+      scrapeTimeout: 30s
+  jobLabel: prometheus-blackbox
+  namespaceSelector:
+    matchNames:
+      - {{ $.Values.namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-blackbox-exporter
+{{ end }}
+{{ end }}

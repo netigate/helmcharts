@@ -1,0 +1,126 @@
+{{- if not .Values.migration.ingress.enabled }}
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+{{ toYaml  .Values.ingress.annotations | indent 4 }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules: {{ range .Values.ingress.hosts}}
+  - host: {{ .host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ $.Values.name }}
+            port:
+              number: 80
+        path: {{ .contextPath }}
+        pathType: Prefix
+  {{- end }}
+  tls:{{range .Values.ingress.hosts}}
+  - hosts:
+    - {{ .host }}
+    secretName: {{ .tlsSecretName }}
+    {{- end }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.grpc.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-grpcint
+  namespace: {{ .Values.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+    {{- range .Values.grpc.annotations }}
+    {{ . }}
+    {{- end }}
+spec:
+  ingressClassName: nginx-internal
+  rules:
+  - host: {{ .Values.name }}.grpc.{{ .Values.environmentFQDN }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.name }}.grpc.{{ .Values.environmentFQDN }}
+    secretName: grpc-wildcard-certificate
+{{- end }}
+---
+{{- if .Values.grpcExt.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-grpcext
+  namespace: {{ .Values.namespace }}
+  annotations:
+    {{- range .Values.grpcExt.annotations }}
+    {{ . }}
+    {{- end }}
+    {{- if .Values.grpcExt.whitelistSourceRange }}
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.grpcExt.whitelistSourceRange }}
+    {{- end }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.name }}.grpc.ext.{{ .Values.environmentFQDN }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.name }}.grcp.ext.{{ .Values.environmentFQDN }}
+    secretName: grpc-wildcard-certificate
+{{- end }}
+---
+{{- if .Values.internalIngress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-int
+  namespace: {{ .Values.namespace }}
+  annotations:
+    {{- range .Values.internalIngress.annotations }}
+    {{ . }}
+    {{- end }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx-internal
+  rules:
+  - host: {{ .Values.name }}.int.{{ .Values.environmentFQDN }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}
+            port:
+              number: 80
+        path: {{ .Values.internalIngress.contextpath }}
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.name }}.int.{{ .Values.environmentFQDN }}
+    secretName: int-wildcard-certificate
+{{- end }}

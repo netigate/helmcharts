@@ -1,0 +1,58 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    release: prometheus
+    team: {{ .Values.team }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  endpoints:
+  - port: http-metrics
+    path: /metrics
+    interval: 15s
+  podTargetLabels:
+  - team
+{{- end }}
+---
+{{- if .Values.healthProbe.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: prometheus
+  name: {{ .Values.name }}-health
+  namespace: {{ .Values.namespace }}
+spec:
+  endpoints:
+  - interval: 30s
+    metricRelabelings:
+    - replacement: http://{{ .Values.name }}.{{ .Values.namespace }}/health
+      sourceLabels:
+      - instance
+      targetLabel: instance
+    - replacement: {{ .Values.name }}-{{ .Values.namespace }}
+      sourceLabels:
+      - target
+      targetLabel: target
+    params:
+      module:
+      - http_get_2xx
+      target:
+      - http://{{ .Values.name }}.{{ .Values.namespace }}/health
+    path: /probe
+    port: http
+    scheme: http
+    scrapeTimeout: 30s
+  jobLabel: prometheus-blackbox
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-blackbox-exporter
+{{- end }}

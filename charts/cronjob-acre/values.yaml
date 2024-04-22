@@ -1,0 +1,35 @@
+name: 
+namespace:
+image:
+tag:
+team:
+environmentFQDN:
+
+existingServiceAccount: false
+
+concurrencyPolicy: Allow
+successfulJobsHistoryLimit: 1
+failedJobsHistoryLimit: 1
+schedule: "5 4 * * *"
+
+imagePullSecrets: []
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+postgres:
+  enabled: false
+
+vault:
+  enabled: false
+
+kafka:
+  enabled: false
+
+envVars:

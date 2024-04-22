@@ -1,0 +1,17 @@
+ingressClass:
+namespace:
+services:
+  - name:
+    team:
+    service:
+      externalName:
+    ingress:
+      annotations: {}
+      host:
+      secretName:
+      backend:
+        backendServicePort:
+        paths: []
+    serviceMonitor:
+      enable:
+      path:

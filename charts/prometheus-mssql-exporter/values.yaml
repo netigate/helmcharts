@@ -1,0 +1,18 @@
+name: prometheus-mssql-exporter
+namespace: monitoring
+image: netigate.azurecr.io/sre/prometheus-prometheus-mssql-exporter
+tag: v1.3.0
+
+internalIngress:
+  enabled: false
+  host:
+  contextpath: /
+
+vault:
+  enabled: true
+  team: sre.DeploymentState
+  address:
+  env:
+    - key: PASSWORD
+    - key: USERNAME
+    - key: SERVER

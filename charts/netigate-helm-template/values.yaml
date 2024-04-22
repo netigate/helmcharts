@@ -1,0 +1,125 @@
+name: 
+namespace:
+image:
+tag:
+environmentFQDN:
+team:
+
+replicaCount: 3
+
+imagePullSecrets: []
+
+metadata:
+  labels:
+
+selector:
+  matchLabels:
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+metrics:
+  enabled: false
+  containerPort:
+
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false
+
+ingress:
+  enabled: false
+  annotations: []
+  hosts:
+  - host:
+    contextPath:
+    tlsSecretName:
+
+internalIngress:
+  enabled: false
+  contextpath: /
+  annotations: []
+
+service:
+  containerPort: 80
+
+grpc:
+  enabled: false
+  containerPort: 443
+  annotations: []
+
+grpcExt:
+  enabled: false
+  whitelistSourceRange:
+  annotations: []
+
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+postgres:
+  enabled: false
+  databaseServer:
+  databaseName:
+
+vault:
+  enabled: false
+  team:
+
+kafka:
+  enabled: false
+  cluster:
+  app:
+
+globalKafka:
+  enabled: false
+  cluster:
+  app:
+
+redis:
+  enabled: false
+  instanceName:
+  userName:
+
+healthProbe:
+  enabled: false
+
+alerts:
+  enabled: true
+
+envVars:
+
+fieldRefs:
+
+
+migration:
+  host:
+  disable_app: false
+  ingress:
+    enabled: false
+    annotations: []
+    hosts:
+    - host:
+      contextPath:
+      tlsSecretName:
+  internalIngress:
+    enabled: false
+    contextpath: /
+    annotations: [ ]
+  grpc:
+    enabled: false
+    containerPort: 443
+    annotations: [ ]
+  grpcExt:
+    enabled: false
+    whitelistSourceRange:
+    annotations: [ ]

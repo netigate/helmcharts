@@ -1,0 +1,31 @@
+{{- if not .Values.migration.disable_app }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    team: {{ .Values.team }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    {{- if .Values.metrics.enabled }}
+    - port: 9090
+      targetPort: http-metrics
+      protocol: TCP
+      name: http-metrics
+    {{- end }}
+    {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+    {{- end }}
+  selector:
+    app: {{ .Values.name }}
+{{- end }}
