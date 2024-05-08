@@ -6,7 +6,6 @@ metadata:
   namespace:  {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
-    team: {{ .Values.team }}
 data:
   {{- range .Values.envVars }}
   {{ .name }}: {{ .data | quote }}
