@@ -1,0 +1,102 @@
+## Netigate daas specific cronjob.
+# Kubernetes docs on cronjobs https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#concurrency-policy
+
+## name of job, and prefix of all resources to be created
+# example: 'name: my-job'
+name:
+
+## namespace to deploy the job, must be your daas projects namespace
+# example 'namespace: data-integration'
+namespace:
+
+## the name of your daas project. used for specifying Vault mount path and role name
+# example 'daasProjectName: data-integration'
+daasProjectName:
+
+## your image tag form ACR
+# example: 'image: netigate.azurecr.io/my-image'
+image:
+# example: 'tag: 0.0.1'
+tag:
+
+## the environment FQDN for the project. used for building url for Hashicorp Vault, and other internal services.
+# example 'environmentFQDN: netigate-acre-dev.com'
+environmentFQDN:
+
+## job concurrency policy. Must be one of 'Allow|Forbid|Replace'
+# default: Allow
+concurrencyPolicy: Allow
+
+## How many completed jobs to keep
+# default: 3
+successfulJobsHistoryLimit: 3
+
+## How many failed jobs to keep
+# default: 1
+failedJobsHistoryLimit: 1
+
+## The schedule for the cronjob in cron format. see docs/help https://crontab.guru/
+# example: 'schedule: 5 4 * * *' runs every day at 04:05
+schedule:
+
+## If you need to pull from a private registry, add the secret name here
+## the only default one that will exist in your namespace is 'netigate'
+# example: 'imagePullSecrets: [netigate]'
+imagePullSecrets: []
+
+## Kubernetes resource claims/limits
+## see docs at https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+# example:
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+resources:
+   requests:
+     cpu: 100m
+     memory: 128Mi
+
+## Aiven postgres instance to connect to
+# example:
+# postgres:
+#   enabled: true
+#   databaseServer: elysium-pg
+#   databaseName: integration-service
+postgres:
+  enabled: false
+  databaseServer:
+  databaseName:
+
+## Hashicorp Vault secrets. can only fetch secrets from mount path /secret/data/<daasProjectName>
+# example:
+# vault:
+#   enabled: true
+#   secrets:
+#     - Integrations__ActivatedForTenantsRaw
+#     - Integrations__ActivatedForTenants
+vault:
+  enabled: false
+  secrets: []
+
+## Aiven kafka credentials. can only fetch credentials from Vault /Aiven/<cluster>/<app>
+# example:
+# kafka:
+#   enabled: true
+#   cluster: elysium-kafka
+#   app: integration-service-cronjob-gdpr
+kafka:
+  enabled: false
+  cluster:
+  app:
+
+## Environment variables to be set in the container
+# example:
+# envVars:
+#   - name: MY_ENV_VAR
+#     data: "mydata"
+#   - name: MY_OTHER_ENV_VAR
+#     data: "myotherdata"
+envVars: []
