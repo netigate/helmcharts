@@ -2,21 +2,21 @@
 # Kubernetes docs on cronjobs https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#concurrency-policy
 
 ## name of job, and prefix of all resources to be created
-# example: 'name: my-job'
+# example: name 'name: my-job'
 name:
 
 ## namespace to deploy the job, must be your daas projects namespace
 # example 'namespace: data-integration'
 namespace:
 
-## the name of your daas project. used for specifying Vault mount path and role name
-# example 'daasProjectName: data-integration'
+### the name of your daas project. used for specifying Vault mount path and role name
+## example 'daasProjectName: data-integration'
 daasProjectName:
 
 ## your image tag form ACR
-# example: 'image: netigate.azurecr.io/my-image'
+# example image 'image: netigate.azurecr.io/my-image'
 image:
-# example: 'tag: 0.0.1'
+## example tag 'tag: 0.0.1'
 tag:
 
 ## the environment FQDN for the project. used for building url for Hashicorp Vault, and other internal services.
@@ -36,17 +36,19 @@ successfulJobsHistoryLimit: 3
 failedJobsHistoryLimit: 1
 
 ## The schedule for the cronjob in cron format. see docs/help https://crontab.guru/
-# example: 'schedule: 5 4 * * *' runs every day at 04:05
+## example: 'schedule: 5 4 * * *' runs every day at 04:05
 schedule:
 
 ## If you need to pull from a private registry, add the secret name here
 ## the only default one that will exist in your namespace is 'netigate'
-# example: 'imagePullSecrets: [netigate]'
+# example:
+# imagePullSecrets:
+#   - name: netigate
 imagePullSecrets: []
 
 ## Kubernetes resource claims/limits
 ## see docs at https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-# example:
+## example:
 # resources:
 #   limits:
 #     cpu: 100m
