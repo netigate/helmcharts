@@ -1,0 +1,122 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  schedule: "{{ .Values.schedule }}"
+  concurrencyPolicy: {{ .Values.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ .Values.name }}
+        spec:
+          {{- if not .Values.existingServiceAccount }}
+          serviceAccountName: {{ .Values.name }}
+          {{- else }}
+          serviceAccountName: {{ .Values.existingServiceAccount }}
+          {{- end }}
+          containers:
+          - name: {{ .Values.name }}
+            image: "{{ .Values.image }}:{{ .Values.tag }}"
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: PrometheusPushgateway__Url
+              value: "https://pushgateway.{{ .Values.environmentFQDN }}"
+            {{- if .Values.postgres.enabled }}
+            - name: ConnectionStrings__PostgresContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: psql-connections-string
+            - name: psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
+            {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: EventBus__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: service-uri
+            - name: EventBus__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: username
+            - name: EventBus__SchemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: schema-registry-uri
+            {{- end }}
+            {{- if .Values.vault.env }}
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            envFrom:
+            {{- if .Values.envVars }}
+            - configMapRef:
+                name: {{ .Values.name }}-configmap
+            {{- end }}
+            volumeMounts:
+              {{- if .Values.vault.env }}
+              - name: secrets-mount
+                mountPath: /mnt/secrets-store
+                readOnly: true
+              {{- end }}
+              {{- if .Values.kafka.enabled }}
+              - name: kafka
+                mountPath: /netigate/kafka/
+                readOnly: true
+              {{- end }}
+              {{- if .Values.postgres.enabled }}
+              - name: postgres
+                mountPath: /netigate/postgres/
+                readOnly: true
+              {{- end }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+          restartPolicy: OnFailure
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          volumes:
+          {{- if .Values.vault.env }}
+          - name: secrets-mount
+            csi:
+              driver: secrets-store.csi.k8s.io
+              readOnly: true
+              volumeAttributes:
+                secretProviderClass: "{{ .Values.name }}-secret"
+          {{- end }}
+          {{- if .Values.postgres.enabled }}
+          - name: postgres
+            csi:
+              driver: secrets-store.csi.k8s.io
+              readOnly: true
+              volumeAttributes:
+                secretProviderClass: "{{ .Values.name }}-postgres"
+          {{- end }}
+          {{- if .Values.kafka.enabled }}
+          - name: kafka
+            csi:
+              driver: secrets-store.csi.k8s.io
+              readOnly: true
+              volumeAttributes:
+                secretProviderClass: "{{ .Values.name }}-kafka"
+          {{- end }}
