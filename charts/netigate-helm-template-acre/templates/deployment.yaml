@@ -84,7 +84,7 @@ spec:
             {{- end }}
             {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
             - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
-              value: https://+:443
+              value: https://+:{{ .Values.grpc.containerPort }}
             {{- end }}
             {{- if .Values.postgres.enabled }}
             - name: ConnectionStrings__PostgresContext
