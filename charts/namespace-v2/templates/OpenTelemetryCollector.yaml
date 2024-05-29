@@ -19,10 +19,16 @@ spec:
         endpoint: tempo-distributor.tracing.svc.cluster.local:4317
         tls:
           insecure: true
+      prometheus:                                                                                                                                                          │
+        endpoint: 0.0.0.0:9091
     service:
       pipelines:
         traces:
           receivers: [otlp]
           processors: []
           exporters: [logging, otlp]
+        metrics:
+          receivers: [otlp]
+          processors: []
+          exporters: [logging, prometheus]
 {{- end }}
