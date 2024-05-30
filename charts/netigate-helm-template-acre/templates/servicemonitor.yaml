@@ -15,6 +15,11 @@ spec:
   - port: http-metrics
     path: /metrics
     interval: 15s
+  {{- if .Values.otlp.enabled }}
+  - port: http-otlp-metrics
+    path: /metrics
+    interval: 15s
+  {{- end }}
   podTargetLabels:
   - team
 {{- end }}
