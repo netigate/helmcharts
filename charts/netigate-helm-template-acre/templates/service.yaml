@@ -19,6 +19,12 @@ spec:
       protocol: TCP
       name: http-metrics
     {{- end }}
+    {{- if .Values.otlp.enabled }}
+    - port: 9091
+      targetPort: 9091
+      protocol: TCP
+      name: http-otlp-metrics
+    {{- end }}
     {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
     - port: 443
       targetPort: https
