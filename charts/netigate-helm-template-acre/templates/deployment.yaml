@@ -257,6 +257,10 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.commands }}
+          command:
+            {{- toYaml .Values.commands | nindent 12 }}
+          {{- end }}
       volumes:
       {{- range .Values.volumes }}
       - {{- toYaml . | nindent 12 }}
