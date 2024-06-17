@@ -39,28 +39,10 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.initContainers }}
       initContainers:
-        {{- range .Values.initContainers }}
-        - name: {{ .name }}
-          image: {{ .image }}
-          imagePullPolicy: IfNotPresent
-          command:
-          {{- range $c := .commands }}
-            - {{ $c }}
-          {{- end }}
-          env:
-          {{- range .env }}
-            - name: {{ .name }}
-            {{- if .data }}
-              value: {{ .data | quote }}
-            {{- else }}
-              valueFrom:
-                {{ .valueFrom }}:
-                  name: {{ .refName }}
-                  key: {{ .name | quote }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+{{ toYaml .Values.initContainers | indent 10 }}
+      {{- end}}
       containers:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
@@ -181,6 +163,9 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
+          {{- range .Values.volumeMounts }}
+          - {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
           - name: grpc
             mountPath: /netigate/cert/
@@ -257,6 +242,10 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
+      {{- range .Values.volumes }}
+      - {{- toYaml . | nindent 12 }}
+      {{- end }}
+
       {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
       - secret:
           secretName: wildcard.{{.Values.environmentFQDN}}
