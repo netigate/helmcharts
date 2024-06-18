@@ -44,6 +44,9 @@ spec:
 {{ toYaml .Values.initContainers | indent 10 }}
       {{- end}}
       containers:
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
