@@ -104,3 +104,11 @@ fieldRefs:
 
 otlp:
   enabled: false
+
+sidecars:
+
+initContainers:
+
+volumeMounts:
+
+volumes:
