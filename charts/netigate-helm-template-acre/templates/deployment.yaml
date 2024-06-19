@@ -39,29 +39,14 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.initContainers }}
       initContainers:
-        {{- range .Values.initContainers }}
-        - name: {{ .name }}
-          image: {{ .image }}
-          imagePullPolicy: IfNotPresent
-          command:
-          {{- range $c := .commands }}
-            - {{ $c }}
-          {{- end }}
-          env:
-          {{- range .env }}
-            - name: {{ .name }}
-            {{- if .data }}
-              value: {{ .data | quote }}
-            {{- else }}
-              valueFrom:
-                {{ .valueFrom }}:
-                  name: {{ .refName }}
-                  key: {{ .name | quote }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+{{ toYaml .Values.initContainers | indent 10 }}
+      {{- end}}
       containers:
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
@@ -181,6 +166,9 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
+          {{- range .Values.volumeMounts }}
+          - {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
           - name: grpc
             mountPath: /netigate/cert/
@@ -212,7 +200,7 @@ spec:
             readOnly: true
           {{- end }}
           envFrom:
-            {{- if .Values.envVars}}
+            {{- if .Values.envVars }}
             - configMapRef:
                 name: {{ .Values.name }}-configmap
             {{- end }}
@@ -236,9 +224,17 @@ spec:
             {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
+            {{- if .Values.livenessProbe.exec }}
+            exec:
+              command: 
+                {{- range .Values.livenessProbe.exec.command }}
+                - {{ . | quote }}
+                {{- end }}
+            {{- else }}
             httpGet:
               path: {{ .Values.livenessProbe.path | default "/health" }}
-              port: http
+              port: {{ .Values.livenessProbe.port | default "http" }}
+            {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
@@ -246,9 +242,17 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.readinessProbe.exec }}
+            exec:
+              command: 
+                {{- range .Values.readinessProbe.exec.command }}
+                - {{ . | quote }}
+                {{- end }}
+            {{- else }}
             httpGet:
               path: {{ .Values.readinessProbe.path | default "/health" }}
               port: http
+            {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
@@ -256,7 +260,15 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.commands }}
+          command:
+            {{- toYaml .Values.commands | nindent 12 }}
+          {{- end }}
       volumes:
+      {{- range .Values.volumes }}
+      - {{- toYaml . | nindent 12 }}
+      {{- end }}
+
       {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
       - secret:
           secretName: wildcard.{{.Values.environmentFQDN}}
