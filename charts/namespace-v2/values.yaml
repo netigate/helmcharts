@@ -2,7 +2,6 @@ vaultAddress:
 internalIngressCertificates: []
 services: []
 nodeSelector:
-  agentpool: default
   kubernetes.io/os: linux
   kubernetes.azure.com/mode: system
   kubernetes.azure.com/agentpool: default
