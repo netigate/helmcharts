@@ -2,4 +2,4 @@ apiVersion: v2
 name: namespace-aks
 description: Create Azure Kubernetes namespace with role binding, and pulls certitcates/imagepullsecret from vault
 type: application
-version: 1.1.0
+version: 1.1.1
