@@ -1,5 +1,3 @@
-onlycerts:
-  namespace:
 vault:
   address:
 services:
