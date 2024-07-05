@@ -24,6 +24,16 @@ entries:
     version: 0.1.10
   namespace-aks:
   - apiVersion: v2
+    created: "2024-07-05T13:46:01.196147616Z"
+    description: Create Azure Kubernetes namespace with role binding, and pulls certitcates/imagepullsecret
+      from vault
+    digest: 41768705224b2fa936e5a029fd115e809267dd0b7b6a1c8d9a08686c3762a992
+    name: namespace-aks
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-aks-1.1.2/namespace-aks-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
     created: "2024-07-05T13:36:53.928677203Z"
     description: Create Azure Kubernetes namespace with role binding, and pulls certitcates/imagepullsecret
       from vault
@@ -1410,4 +1420,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-07-05T13:36:53.928988901Z"
+generated: "2024-07-05T13:46:01.196518076Z"
