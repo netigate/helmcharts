@@ -1,4 +1,5 @@
 {{ range .Values.services }}
+{{ if .roleBinding.enable }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -14,4 +15,5 @@ rules:
       - jobs
       - cronjobs
     verbs: ["*"]
+{{ end }}
 {{ end }}
