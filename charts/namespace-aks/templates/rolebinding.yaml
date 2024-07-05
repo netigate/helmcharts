@@ -1,4 +1,5 @@
 {{ range .Values.services }}
+{{ if .roleBinding.enable }}
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -13,4 +14,5 @@ subjects:
   - kind: Group
     namespace: {{ .name }}
     name: {{ .roleBinding.activeDirectory.group.objectID }}
+{{ end }}
 {{ end }}
