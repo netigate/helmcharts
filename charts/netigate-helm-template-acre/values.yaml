@@ -127,59 +127,81 @@ internalIngress:
   contextpath: /
   annotations: []
 
+## pod port to send traffic from kubernetss service
 service:
   containerPort: 80
 
+## gRPC configuration, will inject cert to container and setup port for k8s service
 grpc:
   enabled: false
   host:
   containerPort: 443
   annotations: []
 
+## gRPC configuration, will inject cert to container and setup port for k8s service
 grpcExt:
   enabled: false
   host:
   whitelistSourceRange:
   annotations: []
 
-
+## Configure horizontal pod autoscaling. This is provider dependent.
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
 
+## Aiven postgres credentials.
+## added users can be found in Vault or in ADO/self-serivce/deploy repo
 postgres:
   enabled: false
   databaseServer:
   databaseName:
 
+## Set to true if you intend to use secrets from vault in your app.
+# Example:
+# vault:
+#   enabled: true
+#   team:
+#     - key: my_secret_in_vault
 vault:
   enabled: false
   team:
 
+## Aiven kafka credentials.
+## added users can be found in Vault or in ADO/self-serivce/deploy repo
 kafka:
   enabled: false
   cluster:
   app:
 
+## Aiven redis credentials.
+## added users can be found in Vault or in ADO/self-serivce/deploy repo
 redis:
   enabled: false
   instanceName:
   userName:
 
+## Aiven opensearch credentials.
+## added users can be found in Vault or in ADO/self-serivce/deploy repo
 opensearch:
   enabled: false
   instanceName:
   userName:
 
+## App health probes
 healthProbe:
   enabled: false
 
+## Creates prometheus default alerts if enabled
 alerts:
   enabled: true
 
+## Environment injected into pod
 envVars:
+  - name:
+    data:
 
 fieldRefs:
 
