@@ -1,20 +1,76 @@
+## Name of your deployment, also use as prefix or pod names and other object names
+# Example:
+# name: my-app
 name:
+
+## Namespace where the deployment will be created. if deployed via DaaS, you must use your dedicated DaaS namespace or app will fail.
+# Example:
+# namespace: my-na
 namespace:
+
+## The image repository and image name to pull from
+# Example:
+# image: netigate.azurecr.io/sre/daas-deployment-test
 image:
+
+## The image tag to pull
+# Example:
+# tag: 0.2.0
 tag:
+
+## The main DNS name for the environment, used for ingress. This is not any globally used domains like netigate.se or netigate.io
+## Only the internal DNS domain of the target environment
+# Example:
+# environmentFQDN: netigate-acre-dev.com
 environmentFQDN:
+
+## Used to get path to secrets in Vault, and also sets app label of the deployment
+## With kubectl you can list your teams deployments by running: kubectl get deployments -l app=<teamName>
+## This is useful to list your app if deployed to a shared namespace
+## kubectl get all -l team=portal
+## kubectl get deployments -l team=portal
+## kubectl get pods -l team=portal
+# Example:
+# team: myteam
 team:
 
+## Number of replicas to create
+# Example:
+# replicaCount: 3
 replicaCount: 3
 
+## List of imagePullSecrets containing private registry credentials, the default use is 'netigate'. image pull secrets
+## are stores in the environments Vault instance
+# Example:
+# imagePullSecrets:
+#  - name: netigate
 imagePullSecrets: []
 
+## Any extra labels to add to the deployment
+## Not required
+# Example:
+# labels:
+#   app: my-app
 metadata:
   labels:
 
+## Specify pods to be maintained by the deployment
+## Not required
+# Example:
+# selector:
+#   matchLabels:
+#     app: my-app
 selector:
   matchLabels:
 
+## The resources to allocate for the container
+# Example:
+# resources:
+#   limits:
+#     memory: 256Mi
+#   requests:
+#     cpu: 0.1
+#     memory: 256Mi
 resources:
   limits:
     memory: 128Mi
@@ -22,16 +78,41 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+## The port the container listens on for metrics. Expects /metrics to respond with metrics.
+# Example:
+# metrics:
+#   enabled: true
+#   containerPort: 9090
 metrics:
   enabled: false
   containerPort:
 
+## The liveness probe configuration. https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# Example:
+# livenessProbe:
+#   enabled: true
 livenessProbe:
   enabled: false
 
+## The readiness probe configuration. https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# Example:
+# readinessProbe:
+#   enabled: true
 readinessProbe:
   enabled: false
 
+## Nginx-ingress configuration
+## https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
+## Certificate used must pre-exist in the namespace
+# Example: sets upingress with rewrite-target annotation
+# ingress:
+#   enabled: true
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /$2
+#   hosts:
+#     - host: netigate-dev.com
+#       contextPath: /daas-test-helmchart(/|$)(.*)
+#       tlsSecretName: wildcard.netigate-dev.com
 ingress:
   enabled: false
   annotations: []
