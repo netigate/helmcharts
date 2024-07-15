@@ -5,6 +5,8 @@ kind: Deployment
 metadata:
   name: vault-fetcher
   namespace: {{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   labels:
     app: vault-fetcher
 spec:

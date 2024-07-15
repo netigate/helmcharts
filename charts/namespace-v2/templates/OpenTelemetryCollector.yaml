@@ -5,6 +5,8 @@ kind: OpenTelemetryCollector
 metadata:
   name: {{ .name }}
   namespace: {{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   mode: sidecar
   config: |
