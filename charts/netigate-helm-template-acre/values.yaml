@@ -46,13 +46,12 @@ replicaCount: 3
 #  - name: netigate
 imagePullSecrets: []
 
-
 ## Any extra labels to add to the deployment
 ## Not required
 # Example:
 # metadata:
 #   labels:
-#     app: my-app
+#     extra-label: some-value
 metadata:
   labels:
 
