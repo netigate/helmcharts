@@ -1,0 +1,34 @@
+---
+{{- if .Values.grpcExt.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-grpcext
+  namespace: {{ .Values.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPCS"
+    {{- range $key, $value := .Values.grpcExt.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- if .Values.grpcExt.whitelistSourceRange }}
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.grpcExt.whitelistSourceRange }}
+    {{- end }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.name }}.grpc.ext.{{ .Values.grpcExt.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.name }}.grcp.ext.{{ .Values.grpcExt.host }}
+    secretName: wildcard.{{ .Values.grpcExt.host }}
+{{- end }}
