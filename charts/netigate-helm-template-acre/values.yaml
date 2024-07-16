@@ -49,8 +49,9 @@ imagePullSecrets: []
 ## Any extra labels to add to the deployment
 ## Not required
 # Example:
-# labels:
-#   app: my-app
+# metadata:
+#   labels:
+#     app: my-app
 metadata:
   labels:
 
