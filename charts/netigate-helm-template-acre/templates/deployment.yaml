@@ -6,8 +6,10 @@ metadata:
   labels:
     app: {{ .Values.name }}
     team: {{ .Values.team }}
+    {{- if .Values.metadata.labels }}
     {{- range $key, $val := .Values.metadata.labels }}
     {{ $key }}: {{ $val | quote }}
+    {{- end }}
     {{- end }}
   annotations:
     reloader.stakater.com/auto: "true"
@@ -18,8 +20,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.name }}
+      {{- if .Values.metadata.labels }}
       {{- range $key, $val := .Values.selector.matchLabels }}
       {{ $key }}: {{ $val | quote }}
+      {{- end }}
       {{- end }}
   template:
     metadata:
