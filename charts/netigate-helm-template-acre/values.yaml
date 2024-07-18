@@ -216,3 +216,9 @@ initContainers:
 volumeMounts:
 
 volumes:
+
+## Node Selector
+nodeSelector:
+  kubernetes.io/os: linux
+  kubernetes.azure.com/mode: user
+  kubernetes.azure.com/agentpool: nixmem
