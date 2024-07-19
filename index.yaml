@@ -215,6 +215,15 @@ entries:
     version: 0.0.1
   namespace-v2:
   - apiVersion: v2
+    created: "2024-07-19T07:22:35.651229869Z"
+    description: Create Azure Kubernetes namespace for v2 type environment
+    digest: f7b0d02b6524a2e189378b945b38288dea4ab75a9f5f73f0cc21e76e847f7684
+    name: namespace-v2
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-v2-0.2.7/namespace-v2-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
     created: "2024-07-15T08:19:32.129672352Z"
     description: Create Azure Kubernetes namespace for v2 type environment
     digest: 49694ab39f7373b012a7cc2b05ea5aa424cd0c659bf0b88e58d312f094442e13
@@ -1060,6 +1069,15 @@ entries:
     version: 0.1.5
   netigate-template-acre:
   - apiVersion: v2
+    created: "2024-07-19T07:22:35.786613604Z"
+    description: A Helm chart template for netigate
+    digest: 760d583736711767c09973ed0a093c80dd316dc489a447633e1418796f5ae1bc
+    name: netigate-template-acre
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-acre-4.1.9/netigate-template-acre-4.1.9.tgz
+    version: 4.1.9
+  - apiVersion: v2
     created: "2024-07-18T12:31:52.059214819Z"
     description: A Helm chart template for netigate
     digest: 0db610877eb378bad1305ec3ca1cb6f605670974aa757201842b488626f1187a
@@ -1502,4 +1520,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-07-18T12:31:52.059681891Z"
+generated: "2024-07-19T07:22:35.786996291Z"
