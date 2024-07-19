@@ -219,6 +219,6 @@ volumes:
 
 ## Node Selector
 nodeSelector:
-  kubernetes.io/os: linux
-  kubernetes.azure.com/mode: user
-  kubernetes.azure.com/agentpool: nixmem
+  kubernetes.netigate.net/os: linux
+  kubernetes.netigate.net/role: user
+  kubernetes.netigate.net/mode: highmemory
