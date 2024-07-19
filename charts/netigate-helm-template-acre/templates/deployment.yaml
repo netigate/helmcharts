@@ -318,3 +318,6 @@ spec:
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-opensearch"
       {{- end }}
+      {{- if $.Values.nodeSelector }}
+      nodeSelector: {{- toYaml $.Values.nodeSelector | nindent 8 }}
+      {{- end }}
