@@ -1,11 +1,6 @@
-vaultAddress: https://vault.infra.netigate-sre.com
-internalIngressCertificates:
-  - certificateName: wildcard.netigate-sre.com
-    kubernetesSecretName: wildcard.netigate-sre.com
-services:
-  - description: test-fetcher
-    name: test-fetcher
-    owner: sre
+vaultAddress:
+internalIngressCertificates: []
+services: []
 nodeSelector:
   kubernetes.netigate.net/os: linux
   kubernetes.netigate.net/role: system
