@@ -76,12 +76,12 @@ postgres:
 # example:
 # vault:
 #   enabled: true
-#   secrets:
+#   env:
 #     - Integrations__ActivatedForTenantsRaw
 #     - Integrations__ActivatedForTenants
 vault:
   enabled: false
-  secrets: []
+  env: []
 
 ## Aiven kafka credentials. can only fetch credentials from Vault /Aiven/<cluster>/<app>
 # example:
