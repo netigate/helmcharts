@@ -431,6 +431,15 @@ entries:
     version: 1.0.0
   netigate-cronjob-daas:
   - apiVersion: v2
+    created: "2024-07-30T11:39:33.821470167Z"
+    description: Cronjob deployment that only works within daas projects
+    digest: f70f36d88519ed20b355b64b843d1f0b27d4d102113990ca3a4d3845d652e1ae
+    name: netigate-cronjob-daas
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-daas-1.1.4/netigate-cronjob-daas-1.1.4.tgz
+    version: 1.1.4
+  - apiVersion: v2
     created: "2024-05-08T16:03:53.561823223Z"
     description: Cronjob deployment that only works within daas projects
     digest: 475d1ca2cd1b302570df5ef1fdef7c23dd854ad4e25129a4794d85a80e93b52d
@@ -1520,4 +1529,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-07-19T07:22:35.786996291Z"
+generated: "2024-07-30T11:39:33.821723182Z"
