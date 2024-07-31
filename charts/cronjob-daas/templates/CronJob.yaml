@@ -58,13 +58,13 @@ spec:
                   name: {{ .Values.name }}-kafka
                   key: schema-registry-uri
             {{- end }}
-            {{- if .Values.vault.env }}
+            {{- if .Values.vault.enabled }}
             {{- range .Values.vault.env }}
-            - name: {{ .key }}
+            - name: {{ . }}
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Values.name }}-secret
-                  key: {{ .key }}
+                  key: {{ . }}
             {{- end }}
             {{- end }}
             envFrom:
@@ -73,7 +73,7 @@ spec:
                 name: {{ .Values.name }}-configmap
             {{- end }}
             volumeMounts:
-              {{- if .Values.vault.env }}
+              {{- if .Values.vault.enabled }}
               - name: secrets-mount
                 mountPath: /mnt/secrets-store
                 readOnly: true
@@ -96,7 +96,7 @@ spec:
             {{- toYaml . | nindent 10 }}
           {{- end }}
           volumes:
-          {{- if .Values.vault.env }}
+          {{- if .Values.vault.enabled }}
           - name: secrets-mount
             csi:
               driver: secrets-store.csi.k8s.io
