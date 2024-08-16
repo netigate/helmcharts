@@ -17,6 +17,9 @@ spec:
           labels:
             app: {{ .Values.name }}
         spec:
+          {{- if $.Values.nodeSelector }}
+          nodeSelector: {{- toYaml $.Values.nodeSelector | nindent 8 }}
+          {{- end }}
           {{- if not .Values.existingServiceAccount }}
           serviceAccountName: {{ .Values.name }}
           {{- else }}
