@@ -33,4 +33,7 @@ spec:
           receivers: [otlp]
           processors: []
           exporters: [logging, prometheus]
+  resources:
+    requests:
+      cpu: "25m" # 0.05 CPU
 {{- end }}
