@@ -1,0 +1,4 @@
+apiVersion: v2
+name: app-deploy
+description: A Helm chart for deploying netigate applications
+version: 0.0.1
