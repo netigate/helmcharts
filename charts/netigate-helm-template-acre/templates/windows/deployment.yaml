@@ -1,0 +1,323 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+    team: {{ .Values.team }}
+{{- if .Values.metadata.labels }}
+{{- range $key, $val := .Values.metadata.labels }}
+    {{ $key }}: {{ $val | quote }}
+{{- end }}
+{{- end }}
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+      {{- if .Values.metadata.labels }}
+      {{- range $key, $val := .Values.selector.matchLabels }}
+      {{ $key }}: {{ $val | quote }}
+      {{- end }}
+      {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        team: {{ .Values.team }}
+        {{- range $key, $val := .Values.metadata.labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
+      annotations:
+      {{- if .Values.otlp.enabled }}
+        sidecar.opentelemetry.io/inject: "true"
+      {{- end }}
+    spec:
+      serviceAccountName: {{ .Values.name }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+{{ toYaml .Values.initContainers | indent 10 }}
+      {{- end}}
+      containers:
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        - name: {{ .Values.name }}
+          image: "{{ .Values.image }}:{{ .Values.tag }}"
+          imagePullPolicy: IfNotPresent
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
+          env:
+            {{- range $v := .Values.fieldRefs }}
+            - name: {{ $v.name }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: {{ $v.data }}
+            {{- end }}
+            {{- if .Values.vault.enabled }}
+            {{- range .Values.vault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+            - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
+              value: https://+:443
+            {{- end }}
+            {{- if .Values.postgres.enabled }}
+            - name: ConnectionStrings__PostgresContext
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: psql-connections-string
+            - name: ConnectionStrings__PostgresContextGeneric
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
+            - name: psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
+            - name: direct-psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-psql-connections-string
+            - name: direct-generic-psql-connections-string
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-generic-psql-connections-string
+            {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: EventBus__BootStrapServers
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: service-uri
+            - name: EventBus__SchemaRegistry__Username
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: username
+            - name: EventBus__SchemaRegistry__Url
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-kafka
+                  key: schema-registry-uri
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: RedisContext__ConnectionServiceURI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-string
+            - name: RedisContext__ConnectionUser
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-user
+            - name: RedisContext__ConnectionPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-password
+            - name: RedisContext__ConnectionHost
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-host
+            - name: RedisContext__ConnectionPort
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-redis
+                  key: redis-connection-port
+            {{- end }}
+            {{- if .Values.opensearch.enabled }}
+            - name: OpensearchContext__ConnectionUser
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-user
+            - name: OpensearchContext__ConnectionPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-password
+            - name: OpensearchContext__ConnectionHost
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-host
+            - name: OpensearchContext__ConnectionPort
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-opensearch
+                  key: opensearch-connection-port
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+          {{- range .Values.volumeMounts }}
+          - {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+          - name: grpc
+            mountPath: /netigate/cert/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.kafka.enabled }}
+          - name: kafka
+            mountPath: /netigate/kafka/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.postgres.enabled }}
+          - name: postgres
+            mountPath: /netigate/postgres/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.redis.enabled }}
+          - name: redis
+            mountPath: /netigate/redis/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.opensearch.enabled }}
+          - name: opensearch
+            mountPath: /netigate/opensearch/
+            readOnly: true
+          {{- end }}
+          {{- if .Values.vault.enabled }}
+          - name: secrets-mount
+            mountPath: /mnt/secrets-store
+            readOnly: true
+          {{- end }}
+          envFrom:
+            {{- if .Values.envVars }}
+            - configMapRef:
+                name: {{ .Values.name }}-configmap
+            {{- end }}
+            {{- if  .Values.vault.enabled  }}
+            - secretRef:
+                name: {{ .Values.name }}-secret
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.metrics.containerPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+            - name: https
+              containerPort: {{ .Values.grpc.containerPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            {{- if .Values.livenessProbe.exec }}
+            exec:
+              command: 
+                {{- range .Values.livenessProbe.exec.command }}
+                - {{ . | quote }}
+                {{- end }}
+            {{- else }}
+            httpGet:
+              path: {{ .Values.livenessProbe.path | default "/health" }}
+              port: {{ .Values.livenessProbe.port | default "http" }}
+            {{- end }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            {{- if .Values.readinessProbe.exec }}
+            exec:
+              command: 
+                {{- range .Values.readinessProbe.exec.command }}
+                - {{ . | quote }}
+                {{- end }}
+            {{- else }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path | default "/health" }}
+              port: http
+            {{- end }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.commands }}
+          command:
+            {{- toYaml .Values.commands | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- range .Values.volumes }}
+      - {{- toYaml . | nindent 12 }}
+      {{- end }}
+
+      {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
+      - secret:
+          secretName: wildcard.{{.Values.environmentFQDN}}
+        name: grpc
+      {{- end }}
+      {{- if .Values.vault.enabled }}
+      - name: secrets-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-secret"
+      {{- end }}
+      {{- if .Values.postgres.enabled }}
+      - name: postgres
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-postgres"
+      {{- end }}
+      {{- if .Values.kafka.enabled }}
+      - name: kafka
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-kafka"
+      {{- end }}
+      {{- if .Values.redis.enabled }}
+      - name: redis
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-redis"
+      {{- end }}
+      {{- if .Values.opensearch.enabled }}
+      - name: opensearch
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-opensearch"
+      {{- end }}
+      {{- if $.Values.nodeSelector }}
+      nodeSelector: {{- toYaml $.Values.nodeSelector | nindent 8 }}
+      {{- end }}
