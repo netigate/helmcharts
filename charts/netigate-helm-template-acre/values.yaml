@@ -161,14 +161,27 @@ postgres:
   databaseName:
 
 ## Set to true if you intend to use secrets from vault in your app.
+## Only works when nodeSelector is set to linux
 # Example:
 # vault:
 #   enabled: true
-#   team:
+#   env:
 #     - key: my_secret_in_vault
 vault:
   enabled: false
-  team:
+  env:
+
+## Allow usage of secrets from Azure KeyVault
+## Only works when nodeSelector is set to windows
+azure_keyvault:
+  enabled: false
+  name: ntg-sre-kv
+  userAssignedIdentityID: 41109608-c6a4-46de-a817-c6eaf10926de
+  tenantId: 3d842968-29b8-44d2-a3f1-9b8d8c8a2e75
+  secrets:
+    - secret_name
+    - secret_name2
+
 
 ## Aiven kafka credentials.
 ## added users can be found in Vault or in ADO/self-serivce/deploy repo
@@ -191,19 +204,32 @@ opensearch:
   instanceName:
   userName:
 
-## App health probes
-healthProbe:
-  enabled: false
-
 ## Creates prometheus default alerts if enabled
+## Example:
+# alerts:
+#   enabled: true
 alerts:
   enabled: true
 
-## Environment injected into pod
-envVars:
-  - name:
-    data:
+## App health probes, "alerts.enabled" must be true for this to work
+## Example:
+# healthProbe:
+#   enabled: false
+healthProbe:
+  enabled: false
 
+## Environment injected into pod
+## Example
+# envVars:
+#   - name: INTERVAL_SECONDS
+#     data: 20
+envVars:
+
+## Expose pod configuration as fieldRef environment variables to app inside pod
+## Example:
+# fieldRefs:
+#   - name: POD_NAME
+#     data: metadata.name
 fieldRefs:
 
 otlp:
@@ -217,7 +243,12 @@ volumeMounts:
 
 volumes:
 
-## Node Selector
+## Node Selector, kubernetes.netigate.net/os can be linux or windows
+## Example:
+# nodeSelector:
+#   kubernetes.netigate.net/os: windows
+#   kubernetes.netigate.net/role: user
+#   kubernetes.netigate.net/mode: highmemory
 nodeSelector:
   kubernetes.netigate.net/os: linux
   kubernetes.netigate.net/role: user

@@ -1,0 +1,26 @@
+---
+suite: Deployment create
+templates:
+  - templates/Deployment.yaml
+tests:
+  - it: should render
+    values:
+      - ../values_test.yaml
+    set:
+      app.name: my-app
+      app.namespace: my-ns
+    asserts:
+      - isKind:
+          of: Deployment
+---
+suite: Deployment not create
+templates:
+  - templates/Deployment.yaml
+tests:
+  - it: not create
+    set:
+      Deployment:
+        create: false
+    asserts:
+      - hasDocuments:
+          count: 0

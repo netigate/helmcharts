@@ -1,0 +1,44 @@
+app:
+  name: my-app
+  namespace: helm-win-test
+
+Deployment:
+  create: true
+  replicas: 1 # Must be null if horizontalPodAutoscaler is true
+  nodeSelector:
+    kubernetes.netigate.net/os: windows
+    kubernetes.netigate.net/role: user
+    kubernetes.netigate.net/mode: highmemory
+  containers:
+    - name: my-container
+      image: mcr.microsoft.com/dotnet/framework/samples:aspnetapp
+      resources:
+        limits:
+          cpu: 0.1
+          memory: 80M
+      ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+      SecretProviderClass:
+        azure:
+          create: true
+          name: ntg-sre-kv
+          tenantId: my-teant-id
+          userAssignedIdentityID: my-user-assigned-identity-id
+          secrets:
+            - name: ExampleSecret
+              envVarName: EXAMPLE_SECRET1
+            - name: AnotherExampleSecret
+              envVarName: EXAMPLE_SECRET2
+
+Ingress:
+  external:
+    create: true
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: netigate-sre.com
+        path: /ra
+        secretName: netigate-sre.com
