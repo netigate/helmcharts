@@ -171,16 +171,12 @@ vault:
   enabled: false
   env:
 
-## Allow usage of secrets from Azure KeyVault
-## Only works when nodeSelector is set to windows
-azure_keyvault:
+keyvault:
   enabled: false
-  name: ntg-sre-kv
-  userAssignedIdentityID: 41109608-c6a4-46de-a817-c6eaf10926de
-  tenantId: 3d842968-29b8-44d2-a3f1-9b8d8c8a2e75
-  secrets:
-    - secret_name
-    - secret_name2
+  keyvaultName:
+  userAssignedIdentityID:
+  tenantId:
+  env:
 
 
 ## Aiven kafka credentials.

@@ -54,7 +54,7 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
-          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.keyvault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
           env:
             {{- range $v := .Values.fieldRefs }}
             - name: {{ $v.name }}
@@ -68,6 +68,15 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Values.name }}-secret
+                  key: {{ .key }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.keyvault.enabled }}
+            {{- range .Values.keyvault.env }}
+            - name: {{ .key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.name }}-keyvault
                   key: {{ .key }}
             {{- end }}
             {{- end }}
@@ -203,6 +212,11 @@ spec:
             mountPath: /mnt/secrets-store
             readOnly: true
           {{- end }}
+          {{- if .Values.keyvault.enabled }}
+          - name: keyvault-mount
+            mountPath: /mnt/secrets-store
+            readOnly: true
+          {{- end }}
           envFrom:
             {{- if .Values.envVars }}
             - configMapRef:
@@ -285,6 +299,14 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-secret"
+      {{- end }}
+      {{- if .Values.keyvault.enabled }}
+      - name: keyvault-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "{{ .Values.name }}-keyvault"
       {{- end }}
       {{- if .Values.postgres.enabled }}
       - name: postgres
