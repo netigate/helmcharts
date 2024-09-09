@@ -2,4 +2,4 @@ apiVersion: v2
 name: netigate-template-acre
 description: A Helm chart template for netigate
 type: application
-version: 4.1.10-beta-win-app
+version: 4.1.11-beta-win-app
