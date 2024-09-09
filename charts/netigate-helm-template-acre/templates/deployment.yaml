@@ -54,6 +54,10 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image }}:{{ .Values.tag }}"
           imagePullPolicy: IfNotPresent
+          {{- with .Values.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.keyvault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
           env:
             {{- range $v := .Values.fieldRefs }}
