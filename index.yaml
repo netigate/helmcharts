@@ -1143,6 +1143,15 @@ entries:
     version: 0.1.5
   netigate-template-acre:
   - apiVersion: v2
+    created: "2024-09-09T07:44:09.274902267Z"
+    description: A Helm chart template for netigate
+    digest: cbb4a2d98c5e1c349f5964ab70605fed7170c3a2204d77ac2bf5ca8df6cca494
+    name: netigate-template-acre
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-acre-4.1.11-beta-win-app/netigate-template-acre-4.1.11-beta-win-app.tgz
+    version: 4.1.11-beta-win-app
+  - apiVersion: v2
     created: "2024-09-06T09:50:55.218244199Z"
     description: A Helm chart template for netigate
     digest: 5759d795f4393d4fd38b3a07594ff0e4de248b0c5c97e1b24d16d2b8fc86ba9f
@@ -1603,4 +1612,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-06T09:50:55.218669917Z"
+generated: "2024-09-09T07:44:09.275265153Z"
