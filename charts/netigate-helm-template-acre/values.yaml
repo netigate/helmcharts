@@ -80,12 +80,15 @@ resources:
     memory: 128Mi
 
 ## The port the container listens on for metrics. Expects /metrics to respond with metrics.
+## Do not set interval lower than 2m, as it will increase monitroing platform cost
 # Example:
 # metrics:
 #   enabled: true
+#   interval: 2m
 #   containerPort: 9090
 metrics:
   enabled: false
+  interval: 2m
   containerPort:
 
 ## The liveness probe configuration. https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -208,11 +211,13 @@ alerts:
   enabled: true
 
 ## App health probes, "alerts.enabled" must be true for this to work
+## Do not set interval lower than 2m, as it will increase monitroing platform cost
 ## Example:
 # healthProbe:
 #   enabled: false
 healthProbe:
   enabled: false
+  interval: 2m
 
 ## Environment injected into pod
 ## Example

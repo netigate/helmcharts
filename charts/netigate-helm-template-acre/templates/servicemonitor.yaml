@@ -14,11 +14,11 @@ spec:
   endpoints:
   - port: http-metrics
     path: /metrics
-    interval: 15s
+    interval: {{ .Values.metrics.interval }}
   {{- if .Values.otlp.enabled }}
   - port: http-otlp-metrics
     path: /metrics
-    interval: 15s
+    interval: {{ .Values.metrics.interval }}
   {{- end }}
   podTargetLabels:
   - team
@@ -34,7 +34,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   endpoints:
-  - interval: 30s
+  - interval: {{ .Values.healthProbe.interval }}
     metricRelabelings:
     - replacement: http://{{ .Values.name }}.{{ .Values.namespace }}/health
       sourceLabels:
