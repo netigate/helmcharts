@@ -58,7 +58,7 @@ imagePullSecrets: []
 #     memory: 128Mi
 resources:
    requests:
-     cpu: 100m
+     cpu: 24m
      memory: 128Mi
 
 ## Aiven postgres instance to connect to
