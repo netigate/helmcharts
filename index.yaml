@@ -318,6 +318,16 @@ entries:
   netigate-cronjob:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-18T11:29:15.523974933Z"
+    description: A Helm chart template for netigate
+    digest: bc3084d1e4d41eb18c6ad5a75d8a18a479a1c14e4df859809cf2b13d449e61fa
+    name: netigate-cronjob
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-0.4.3/netigate-cronjob-0.4.3.tgz
+    version: 0.4.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-12-21T12:59:48.537741821Z"
     description: A Helm chart template for netigate
     digest: 7e0abaa13bf091a3794feceecebede66d01447170173b0c796875f0426d7f160
@@ -399,6 +409,16 @@ entries:
   netigate-cronjob-acre:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-18T11:29:15.688583447Z"
+    description: A Helm chart template for netigate
+    digest: f1c43f7c6896aeb377e6e937ebf9435f891fba51cb403fa0807aa0300ff08cd9
+    name: netigate-cronjob-acre
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-acre-1.0.7/netigate-cronjob-acre-1.0.7.tgz
+    version: 1.0.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-08-29T08:26:45.233175333Z"
     description: A Helm chart template for netigate
     digest: 91a5ab7bf9ce2ba8c11b653e0c6deba6f30b4a4d17abe93f3fa6590d4b2c4f23
@@ -468,6 +488,15 @@ entries:
     - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-acre-1.0.0/netigate-cronjob-acre-1.0.0.tgz
     version: 1.0.0
   netigate-cronjob-daas:
+  - apiVersion: v2
+    created: "2024-09-18T11:29:15.82714617Z"
+    description: Cronjob deployment that only works within daas projects
+    digest: d51da7e259f238778f6c73d72cdbcd50c1d424d9b21f4e4676f45b53268e5078
+    name: netigate-cronjob-daas
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-cronjob-daas-1.1.8/netigate-cronjob-daas-1.1.8.tgz
+    version: 1.1.8
   - apiVersion: v2
     created: "2024-08-29T08:26:45.348429376Z"
     description: Cronjob deployment that only works within daas projects
@@ -1143,6 +1172,15 @@ entries:
     version: 0.1.5
   netigate-template-acre:
   - apiVersion: v2
+    created: "2024-09-18T11:29:15.948311827Z"
+    description: A Helm chart template for netigate
+    digest: 030d6ebb836c2d3d6a66a24c240f68bb09fbba283cb788d7ea50f290a0682a40
+    name: netigate-template-acre
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/netigate-template-acre-4.1.13/netigate-template-acre-4.1.13.tgz
+    version: 4.1.13
+  - apiVersion: v2
     created: "2024-09-18T07:57:12.620945518Z"
     description: A Helm chart template for netigate
     digest: e3cfc820a8a3a745840254784c280e294b5278ed62199ac375df1ad9f45d9c9e
@@ -1621,4 +1659,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-18T07:57:12.621500343Z"
+generated: "2024-09-18T11:29:15.948825649Z"
