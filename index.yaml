@@ -224,6 +224,15 @@ entries:
     version: 0.0.1
   namespace-v2:
   - apiVersion: v2
+    created: "2024-09-20T14:06:51.291268424Z"
+    description: nginx acr image, imagePullSecrets must exist
+    digest: ec02fd79e013af31b5badee01b3e45c73e7223722b83cdb34b0821d174b6f4c1
+    name: namespace-v2
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-v2-0.3.0/namespace-v2-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     created: "2024-08-22T13:54:38.598800099Z"
     description: Create Azure Kubernetes namespace for v2 type environment
     digest: 78f21267ee98ca20571c494dbaa889e8cdb2b6586641482c90a7d273bba66ebf
@@ -1659,4 +1668,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-18T11:29:15.948825649Z"
+generated: "2024-09-20T14:06:51.291635368Z"
