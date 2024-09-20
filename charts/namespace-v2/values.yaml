@@ -4,3 +4,6 @@ services: []
 nodeSelector:
   kubernetes.netigate.net/os: linux
   kubernetes.netigate.net/role: system
+image: netigate.azurecr.io/docker.io/nginx:latest
+imagePullSecrets:
+  - name: netigate

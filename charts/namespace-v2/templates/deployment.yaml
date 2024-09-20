@@ -21,9 +21,13 @@ spec:
       labels:
         app: vault-fetcher
     spec:
+      imagePullSecrets:
+        {{ .Values.imagePullSecrets | toYaml | nindent 8 }}
+      nodeSelector:
+        {{ .Values.nodeSelector | toYaml | nindent 8 }}
       serviceAccountName: vault-fetcher
       containers:
-      - image: nginx:latest
+      - image: {{ $.Values.image }}
         imagePullPolicy: Always
         name: vault-fetcher
         volumeMounts:
@@ -37,7 +41,4 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: vault-fetcher
-      {{- if $.Values.nodeSelector }}
-      nodeSelector: {{- toYaml $.Values.nodeSelector | nindent 8 }}
-      {{- end }}
 {{- end }}

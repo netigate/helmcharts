@@ -1,9 +1,9 @@
 apiVersion: v2
 name: namespace-v2
-description: Create Azure Kubernetes namespace for v2 type environment
+description: nginx acr image, imagePullSecrets must exist
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.8
+version: 0.3.0
