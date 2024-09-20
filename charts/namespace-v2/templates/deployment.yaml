@@ -22,9 +22,9 @@ spec:
         app: vault-fetcher
     spec:
       imagePullSecrets:
-        {{ .Values.imagePullSecrets | toYaml | nindent 8 }}
+        {{ $.Values.imagePullSecrets | toYaml | nindent 8 }}
       nodeSelector:
-        {{ .Values.nodeSelector | toYaml | nindent 8 }}
+        {{ $.Values.nodeSelector | toYaml | nindent 8 }}
       serviceAccountName: vault-fetcher
       containers:
       - image: {{ $.Values.image }}
