@@ -224,6 +224,15 @@ entries:
     version: 0.0.1
   namespace-v2:
   - apiVersion: v2
+    created: "2024-09-20T14:11:08.210552153Z"
+    description: nginx acr image, imagePullSecrets must exist
+    digest: e7352900e50862f022d325988b151e611f47198a671b1c060937dabec1ed7972
+    name: namespace-v2
+    type: application
+    urls:
+    - https://github.com/netigate/helmcharts/releases/download/namespace-v2-0.3.1/namespace-v2-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
     created: "2024-09-20T14:06:51.291268424Z"
     description: nginx acr image, imagePullSecrets must exist
     digest: ec02fd79e013af31b5badee01b3e45c73e7223722b83cdb34b0821d174b6f4c1
@@ -1668,4 +1677,4 @@ entries:
     urls:
     - https://github.com/netigate/helmcharts/releases/download/prometheus-mssql-exporter-0.0.1/prometheus-mssql-exporter-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-20T14:06:51.291635368Z"
+generated: "2024-09-20T14:11:08.211027824Z"
