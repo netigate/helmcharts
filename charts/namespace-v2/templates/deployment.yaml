@@ -28,7 +28,7 @@ spec:
       serviceAccountName: vault-fetcher
       containers:
       - image: {{ $.Values.image }}
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: vault-fetcher
         volumeMounts:
         - name: secrets-mount
