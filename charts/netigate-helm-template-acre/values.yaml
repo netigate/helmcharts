@@ -168,6 +168,7 @@ postgres:
 # Example:
 # vault:
 #   enabled: true
+#   pathSuffix: /config # Optional. Can be used for non DaaS apps. will add a suffix to SecretProviderClass vault path.
 #   env:
 #     - key: my_secret_in_vault
 vault:
