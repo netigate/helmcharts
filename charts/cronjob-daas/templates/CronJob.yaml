@@ -31,7 +31,7 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
             - name: PrometheusPushgateway__Url
-              value: "https://pushgateway.{{ .Values.environmentFQDN }}"
+              value: "https://pushgateway.int.{{ .Values.environmentFQDN }}"
             {{- if .Values.postgres.enabled }}
             - name: ConnectionStrings__PostgresContext
               valueFrom:
