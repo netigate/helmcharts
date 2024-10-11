@@ -261,6 +261,7 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 1 }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
             successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -279,6 +280,7 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 1 }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
             successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
