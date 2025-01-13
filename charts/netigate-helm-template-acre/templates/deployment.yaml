@@ -229,7 +229,7 @@ spec:
             readOnly: true
           {{- end }}
           {{- if .Values.azureStorageAccount.enabled }}
-          - name: azureStorageAccount
+          - name: azurestorageaccount
             mountPath: /netigate/azurestorageaccount/
             readOnly: true
           {{- end }}
@@ -367,7 +367,7 @@ spec:
             secretProviderClass: "{{ .Values.name }}-opensearch"
       {{- end }}
       {{- if .Values.azureStorageAccount.enabled }}
-      - name: azureStorageAccount
+      - name: azurestorageaccount
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
