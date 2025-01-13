@@ -1,0 +1,132 @@
+name: sms-service
+namespace: elysium
+image: netigate.azurecr.io/platform.sms-service
+tag: 1.0.1
+team: distributeandcollect
+
+replicaCount: &replicas 1
+
+imagePullSecrets:
+  - name: netigate
+
+environmentFQDN: netigate-acre-stage.com
+
+resources:
+  requests:
+    cpu: 0.2
+    memory: 256Mi
+  limits:
+    memory: 256Mi
+
+metrics:
+  enabled: true
+  containerPort: 9090
+
+otlp:
+  enabled: true
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: netigate-acre-stage.com
+      contextPath: /api/sms-service(/|$)(.*)
+      tlsSecretName: netigate-acre-stage.com
+
+internalIngress:
+  enabled: false
+
+service:
+  containerPort: 80
+
+grpc:
+  enabled: true
+  host: netigate-acre-stage.com
+  containerPort: 443
+
+grpcExt:
+  enabled: false
+
+autoscaling:
+  enabled: true
+  minReplicas: *replicas
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+
+postgres:
+  enabled: false
+
+logging:
+  enabled: true
+
+kafka:
+  enabled: true
+  cluster: elysium-kafka
+  app: sms-service
+
+globalKafka:
+  enabled: false
+
+redis:
+  enabled: false
+
+healthProbe:
+  enabled: false
+
+alerts:
+  enabled: true
+
+vault:
+  enabled: true
+  team: elysium
+  address: https://vault.int.netigate-acre-stage.com
+  env:
+    - key: SinchApi__ApiToken
+    - key: SinchApi__WebhookBasicAuthHeaderValue
+
+envVars:
+  - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Certificate__Path
+    data: "/netigate/cert/tls.crt"
+  - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Certificate__KeyPath
+    data: "/netigate/cert/tls.key"
+  - name: EventBus__SslCaLocation
+    data: "/netigate/kafka/ca-cert"
+  - name: EventBus__SslCertificateLocation
+    data: "/netigate/kafka/access-cert"
+  - name: EventBus__SslKeyLocation
+    data: "/netigate/kafka/access-key"
+  - name: EventBus__Protocol
+    data: "Ssl"
+  - name: SinchApi__BaseUrl
+    data: https://eu.sms.api.sinch.com/xms/
+  - name: SinchApi__ServicePlanId
+    data: "52fe62aa04484572a9785549f7bd6683"
+  - name: SinchApi__TransientErrorRetriesCount
+    data: "3"
+  - name: SinchApi__TransientErrorRetryDelayInMilliseconds
+    data: "200"
+  - name: SinchApi__SinchClientTimeoutInSeconds
+    data: "60"
+  - name: SinchApi__SmsWebhookEndpoint
+    data: https://netigate-acre-stage.com/api/sms-service/v1/webhooks/sms
+  - name: IntegrationEvents__SmsWebhooksTopicName
+    data: "elysium.smsservice.webhooks"
+
+# Custom rule config. Notice no space before PrometheusRule:
+PrometheusRule:
+  name: sms-service
+  namespace: elysium
+  notifyTarget: DistributeCollectCritical
+
+azure_object_storage:
+  enabled: false
+  name: test-sa

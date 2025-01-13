@@ -58,7 +58,7 @@ spec:
           lifecycle:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.keyvault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled .Values.azureStorageAccount.enabled }}
+          {{- if or .Values.grpc.enabled .Values.grpcExt.enabled .Values.postgres.enabled .Values.vault.enabled .Values.keyvault.enabled .Values.kafka.enabled .Values.redis.enabled .Values.opensearch.enabled }}
           env:
             {{- range $v := .Values.fieldRefs }}
             - name: {{ $v.name }}
@@ -181,23 +181,6 @@ spec:
                   name: {{ .Values.name }}-opensearch
                   key: opensearch-connection-port
             {{- end }}
-            {{- if .Values.azureStorageAccount.enabled }}
-            - name: AzureStorageAccount_PrimaryAccessKey
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-azure-storage-account
-                  key: primary_access_key
-            - name: AzureStorageAccount_PrimaryBlobEndpoint
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-azure-storage-account
-                  key: primary_blob_endpoint
-            - name: AzureStorageAccount_PrimaryConnectionString
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-azure-storage-account
-                  key: primary_connection_string
-            {{- end }}
           {{- end }}
           volumeMounts:
           {{- range .Values.volumeMounts }}
@@ -226,11 +209,6 @@ spec:
           {{- if .Values.opensearch.enabled }}
           - name: opensearch
             mountPath: /netigate/opensearch/
-            readOnly: true
-          {{- end }}
-          {{- if .Values.azureStorageAccount.enabled }}
-          - name: azurestorageaccount
-            mountPath: /netigate/azurestorageaccount/
             readOnly: true
           {{- end }}
           {{- if .Values.vault.enabled }}
@@ -365,14 +343,6 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "{{ .Values.name }}-opensearch"
-      {{- end }}
-      {{- if .Values.azureStorageAccount.enabled }}
-      - name: azurestorageaccount
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "{{ .Values.name }}-azure-storage-account"
       {{- end }}
       {{- if $.Values.nodeSelector }}
       nodeSelector: {{- toYaml $.Values.nodeSelector | nindent 8 }}
