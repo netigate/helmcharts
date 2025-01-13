@@ -204,12 +204,17 @@ opensearch:
   instanceName:
   userName:
 
-## Creates prometheus default alerts if enabled
+
+## Azure Storage Account
+## Give app credentials from object storage from ADO/self-service/deploy
 ## Example:
-# alerts:
+# azureStorageAccount:
 #   enabled: true
-alerts:
-  enabled: true
+#   name: test-sa
+azureStorageAccount:
+  enabled: false
+  name:
+
 
 ## App health probes, "alerts.enabled" must be true for this to work
 ## Do not set interval lower than 2m, as it will increase monitroing platform cost
