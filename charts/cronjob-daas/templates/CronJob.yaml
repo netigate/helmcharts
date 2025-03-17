@@ -29,6 +29,12 @@ spec:
           - name: {{ .Values.name }}
             image: "{{ .Values.image }}:{{ .Values.tag }}"
             imagePullPolicy: IfNotPresent
+            {{- if .Values.commands.enabled }}
+            command:
+              {{- range .Values.commands.command}}
+              - "{{ . }}"
+              {{- end }}
+            {{- end }}
             env:
             - name: PrometheusPushgateway__Url
               value: "https://pushgateway.int.{{ .Values.environmentFQDN }}"

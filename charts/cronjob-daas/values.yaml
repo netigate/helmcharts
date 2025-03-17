@@ -19,6 +19,17 @@ image:
 ## example tag 'tag: 0.0.1'
 tag:
 
+# Added the ability to provide custom commands to the container
+# example:
+# commands:
+#   enabled: false
+#   command:
+#     - "echo"
+#     - "Hello, World!"
+commands:
+  enabled: false
+  command: []
+
 ## the environment FQDN for the project. used for building url for Hashicorp Vault, and other internal services.
 # example 'environmentFQDN: netigate-acre-dev.com'
 environmentFQDN:
