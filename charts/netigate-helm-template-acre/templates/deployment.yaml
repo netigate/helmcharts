@@ -84,6 +84,13 @@ spec:
                   key: {{ .key }}
             {{- end }}
             {{- end }}
+            {{- range .Values.secretEnvVars }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .key }}
+            {{- end }}
             {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
             - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
               value: https://+:443
