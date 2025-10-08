@@ -84,12 +84,14 @@ spec:
                   key: {{ .key }}
             {{- end }}
             {{- end }}
+            {{- if .Values.secretEnvVars }}
             {{- range .Values.secretEnvVars }}
             - name: {{ .name }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .secretName }}
                   key: {{ .key }}
+            {{- end }}
             {{- end }}
             {{- if or .Values.grpc.enabled .Values.grpcExt.enabled }}
             - name: Kestrel__Endpoints__HttpsInlineCertAndKeyFile__Url
