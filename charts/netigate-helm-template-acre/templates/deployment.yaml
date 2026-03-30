@@ -98,6 +98,38 @@ spec:
               value: https://+:443
             {{- end }}
             {{- if .Values.postgres.enabled }}
+            {{- if .Values.postgres.connectionStringSuffix }}
+            - name: _PSQL_CS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: psql-connections-string
+            - name: ConnectionStrings__PostgresContext
+              value: "$(_PSQL_CS){{ .Values.postgres.connectionStringSuffix }}"
+            - name: _PSQL_CS_GENERIC
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: generic-psql-connections-string
+            - name: ConnectionStrings__PostgresContextGeneric
+              value: "$(_PSQL_CS_GENERIC){{ .Values.postgres.connectionStringSuffix }}"
+            - name: psql-connections-string
+              value: "$(_PSQL_CS_GENERIC){{ .Values.postgres.connectionStringSuffix }}"
+            - name: _PSQL_CS_DIRECT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-psql-connections-string
+            - name: direct-psql-connections-string
+              value: "$(_PSQL_CS_DIRECT){{ .Values.postgres.connectionStringSuffix }}"
+            - name: _PSQL_CS_DIRECT_GENERIC
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres
+                  key: direct-generic-psql-connections-string
+            - name: direct-generic-psql-connections-string
+              value: "$(_PSQL_CS_DIRECT_GENERIC){{ .Values.postgres.connectionStringSuffix }}"
+            {{- else }}
             - name: ConnectionStrings__PostgresContext
               valueFrom:
                 secretKeyRef:
@@ -123,6 +155,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres
                   key: direct-generic-psql-connections-string
+            {{- end }}
             {{- end }}
             {{- if .Values.kafka.enabled }}
             - name: EventBus__BootStrapServers
