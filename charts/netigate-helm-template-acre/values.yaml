@@ -162,6 +162,7 @@ postgres:
   enabled: false
   databaseServer:
   databaseName:
+  connectionStringSuffix:
 
 ## Set to true if you intend to use secrets from vault in your app.
 ## Only works when nodeSelector is set to linux
