@@ -113,13 +113,8 @@ spec:
                   key: generic-psql-connections-string
             - name: ConnectionStrings__PostgresContextGeneric
               value: "$(_PSQL_CS_GENERIC){{ .Values.postgres.connectionStringSuffix }}"
-            - name: _PSQL_CS_GENERIC2
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.name }}-postgres
-                  key: generic-psql-connections-string
             - name: psql-connections-string
-              value: "$(_PSQL_CS_GENERIC2){{ .Values.postgres.connectionStringSuffix }}"
+              value: "$(_PSQL_CS_GENERIC){{ .Values.postgres.connectionStringSuffix }}"
             - name: _PSQL_CS_DIRECT
               valueFrom:
                 secretKeyRef:
