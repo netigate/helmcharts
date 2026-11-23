@@ -134,6 +134,12 @@ internalIngress:
 ## pod port to send traffic from kubernetss service
 service:
   containerPort: 80
+  ## Additional ports the container listens on, exposed on the k8s service under the same number
+  ## Example:
+  # extraPorts:
+  #   - name: internal
+  #     port: 8081
+  extraPorts: []
 
 ## gRPC configuration, will inject cert to container and setup port for k8s service
 grpc:
