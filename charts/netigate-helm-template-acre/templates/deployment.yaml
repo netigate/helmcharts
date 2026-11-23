@@ -286,6 +286,11 @@ spec:
               containerPort: {{ .Values.grpc.containerPort }}
               protocol: TCP
             {{- end }}
+            {{- range .Values.service.extraPorts }}
+            - name: {{ .name }}
+              containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             {{- if .Values.livenessProbe.exec }}
